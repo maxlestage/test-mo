@@ -1,0 +1,20 @@
+{
+  "name": "test-mo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bunx --bun vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "pinia": "^2.1.7",
+    "uuid": "^9.0.1",
+    "vue": "^3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5",
+    "vite": "^5"
+  }
+}
