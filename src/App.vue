@@ -6,9 +6,9 @@ import View from "./components/View.vue";
   <div class="app">
     <header class="app-header">
       <div class="brand">
-        <span class="logo">L</span>
+        <span class="logo">M</span>
         <div>
-          <h1>Lexikon</h1>
+          <h1>Mo-Grid</h1>
           <p>Atelier d'analyse linguistique de texte</p>
         </div>
       </div>
@@ -56,5 +56,16 @@ import View from "./components/View.vue";
   margin: 0.1rem 0 0;
   font-size: 0.78rem;
   color: var(--text-dim);
+}
+@media (max-width: 640px) {
+  .app-header {
+    padding: 0.75rem 1rem;
+  }
+  .brand p {
+    display: none;
+  }
+  .app-header .tag {
+    display: none;
+  }
 }
 </style>

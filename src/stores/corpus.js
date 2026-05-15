@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { tokenizeWords } from "../libs/text.js";
 import { detectLanguage } from "../libs/stopwords.js";
 
-const STORAGE_KEY = "linguistics-corpus";
+const STORAGE_KEY = "mo-grid-corpus";
 
 const SAMPLES = [
   {
