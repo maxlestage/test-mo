@@ -201,4 +201,19 @@ h2 {
   color: var(--text-dim);
   font-size: 0.82rem;
 }
+
+@media (max-width: 860px) {
+  .manager {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: min(86vw, 320px);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 50;
+    box-shadow: 6px 0 28px #000a;
+  }
+  .manager.open {
+    transform: none;
+  }
+}
 </style>

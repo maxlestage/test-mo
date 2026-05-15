@@ -46,24 +46,26 @@ const chartData = computed(() =>
       />
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Mot</th>
-          <th>Occurrences</th>
-          <th>Fréquence</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(f, i) in filtered.slice(0, topN)" :key="f.word">
-          <td class="dim">{{ i + 1 }}</td>
-          <td class="mono">{{ f.word }}</td>
-          <td>{{ f.count }}</td>
-          <td class="dim">{{ (f.ratio * 100).toFixed(2) }} %</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Mot</th>
+            <th>Occurrences</th>
+            <th>Fréquence</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(f, i) in filtered.slice(0, topN)" :key="f.word">
+            <td class="dim">{{ i + 1 }}</td>
+            <td class="mono">{{ f.word }}</td>
+            <td>{{ f.count }}</td>
+            <td class="dim">{{ (f.ratio * 100).toFixed(2) }} %</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -72,6 +74,9 @@ const chartData = computed(() =>
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+.table-wrap {
+  overflow-x: auto;
 }
 .toolbar {
   display: flex;

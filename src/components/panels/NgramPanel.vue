@@ -49,25 +49,27 @@ const colloc = computed(() =>
           Cooccurrences plus fréquentes que ne le voudrait le hasard
           (information mutuelle ponctuelle, mots vides exclus).
         </p>
-        <table>
-          <thead>
-            <tr>
-              <th>Bigramme</th>
-              <th>Occ.</th>
-              <th>PMI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="c in colloc" :key="c.gram">
-              <td class="mono">{{ c.gram }}</td>
-              <td>{{ c.count }}</td>
-              <td class="dim">{{ c.pmi.toFixed(2) }}</td>
-            </tr>
-            <tr v-if="!colloc.length">
-              <td colspan="3" class="dim">Texte trop court.</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Bigramme</th>
+                <th>Occ.</th>
+                <th>PMI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="c in colloc" :key="c.gram">
+                <td class="mono">{{ c.gram }}</td>
+                <td>{{ c.count }}</td>
+                <td class="dim">{{ c.pmi.toFixed(2) }}</td>
+              </tr>
+              <tr v-if="!colloc.length">
+                <td colspan="3" class="dim">Texte trop court.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </div>
   </div>
@@ -78,6 +80,9 @@ const colloc = computed(() =>
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+.table-wrap {
+  overflow-x: auto;
 }
 @media (max-width: 900px) {
   .cols {
