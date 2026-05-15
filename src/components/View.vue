@@ -8,6 +8,7 @@ import DiversityPanel from "./panels/DiversityPanel.vue";
 import ReadabilityPanel from "./panels/ReadabilityPanel.vue";
 import NgramPanel from "./panels/NgramPanel.vue";
 import ConcordancePanel from "./panels/ConcordancePanel.vue";
+import SentimentPanel from "./panels/SentimentPanel.vue";
 
 const { document, hasContent } = useAnalysis();
 
@@ -16,6 +17,7 @@ const tabs = [
   { id: "frequency", label: "Fréquences", comp: FrequencyPanel },
   { id: "diversity", label: "Richesse lexicale", comp: DiversityPanel },
   { id: "readability", label: "Lisibilité", comp: ReadabilityPanel },
+  { id: "sentiment", label: "Sentiment", comp: SentimentPanel },
   { id: "ngram", label: "N-grammes", comp: NgramPanel },
   { id: "kwic", label: "Concordance", comp: ConcordancePanel },
 ];
