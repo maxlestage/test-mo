@@ -12,6 +12,7 @@ import {
   readabilityInputs,
   wordLengthDistribution,
 } from "../libs/linguistics.js";
+import { analyzeSentiment } from "../libs/sentiment.js";
 
 export function useAnalysis() {
   const store = useCorpusStore();
@@ -39,6 +40,8 @@ export function useAnalysis() {
 
   const wordLengths = computed(() => wordLengthDistribution(words.value));
 
+  const sentiment = computed(() => analyzeSentiment(text.value));
+
   return {
     document,
     text,
@@ -50,6 +53,7 @@ export function useAnalysis() {
     diversity,
     readability,
     wordLengths,
+    sentiment,
     settings,
   };
 }
