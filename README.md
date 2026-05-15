@@ -1,8 +1,11 @@
-# Lexikon — Atelier d'analyse linguistique
+# Mo-Grid — Atelier d'analyse linguistique
 
 Outil web d'analyse linguistique de texte, **entièrement local** : aucun texte
 n'est envoyé sur un serveur, tout est calculé dans le navigateur et le corpus
 est persisté dans le `localStorage`.
+
+Interface **responsive** : utilisable sur mobile (barre de corpus en tiroir
+coulissant) comme sur desktop.
 
 Construit avec **Vue 3** (`<script setup>`) + **Vite** + **Pinia**.
 

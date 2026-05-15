@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useAnalysis } from "../composables/useAnalysis.js";
 import DocumentManager from "./DocumentManager.vue";
 import OverviewPanel from "./panels/OverviewPanel.vue";
@@ -20,11 +20,35 @@ const tabs = [
   { id: "kwic", label: "Concordance", comp: ConcordancePanel },
 ];
 const active = ref("overview");
+const menuOpen = ref(false);
+
+// Sur mobile, refermer le tiroir dès qu'un document devient actif.
+watch(
+  () => document.value?.id,
+  () => {
+    menuOpen.value = false;
+  }
+);
 </script>
 
 <template>
   <div class="layout">
-    <DocumentManager />
+    <button
+      class="menu-btn"
+      :aria-expanded="menuOpen"
+      @click="menuOpen = !menuOpen"
+    >
+      ☰ Corpus
+    </button>
+
+    <div
+      v-if="menuOpen"
+      class="backdrop"
+      @click="menuOpen = false"
+    />
+
+    <DocumentManager :class="{ open: menuOpen }" />
+
     <main class="content">
       <template v-if="document && hasContent">
         <div class="doc-title">
@@ -47,10 +71,10 @@ const active = ref("overview");
 
       <div v-else class="empty">
         <div class="empty-card">
-          <h2>Bienvenue dans Lexikon</h2>
+          <h2>Bienvenue dans Mo-Grid</h2>
           <p>
             Importez un fichier <code>.txt</code>/<code>.md</code>, collez un
-            texte ou chargez les exemples depuis le panneau de gauche pour lancer
+            texte ou chargez les exemples depuis le panneau Corpus pour lancer
             l'analyse linguistique.
           </p>
           <ul>
@@ -70,23 +94,50 @@ const active = ref("overview");
 .layout {
   display: flex;
   flex: 1;
-  min-height: calc(100vh - 71px);
+  min-height: 0;
+  position: relative;
+}
+.menu-btn {
+  display: none;
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 60;
+  background: var(--accent);
+  color: #1a1100;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px #0008;
+}
+.backdrop {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: #0009;
+  z-index: 40;
 }
 .content {
   flex: 1;
+  min-width: 0;
   padding: 1.5rem 2rem;
   overflow-y: auto;
 }
 .doc-title h2 {
   font-size: 1.05rem;
   margin-bottom: 1rem;
+  word-break: break-word;
 }
 .tabs {
   display: flex;
   gap: 0.3rem;
   border-bottom: 1px solid var(--border);
   margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .tabs button {
   background: none;
@@ -96,6 +147,7 @@ const active = ref("overview");
   font-size: 0.85rem;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
+  white-space: nowrap;
 }
 .tabs button:hover {
   color: var(--text);
@@ -138,5 +190,17 @@ code {
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
   font-size: 0.85em;
+}
+
+@media (max-width: 860px) {
+  .menu-btn {
+    display: block;
+  }
+  .backdrop {
+    display: block;
+  }
+  .content {
+    padding: 1.25rem 1rem 4.5rem;
+  }
 }
 </style>

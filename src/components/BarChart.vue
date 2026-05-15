@@ -68,4 +68,11 @@ const max = computed(() =>
   font-size: 0.85rem;
   padding: 1rem 0;
 }
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: 84px 1fr 48px;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+  }
+}
 </style>
