@@ -1,7 +1,58 @@
-# Vue 3 + Vite
+# Lexikon — Atelier d'analyse linguistique
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Outil web d'analyse linguistique de texte, **entièrement local** : aucun texte
+n'est envoyé sur un serveur, tout est calculé dans le navigateur et le corpus
+est persisté dans le `localStorage`.
 
-## Recommended IDE Setup
+Construit avec **Vue 3** (`<script setup>`) + **Vite** + **Pinia**.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Fonctionnalités
+
+- **Gestion de corpus** : import glisser-déposer (`.txt`, `.md`, `.csv`),
+  collage de texte, textes d'exemple (FR/EN), persistance locale.
+- **Vue d'ensemble** : nombre de mots / phrases / paragraphes / caractères,
+  longueur moyenne des mots et des phrases, temps de lecture estimé,
+  distribution de la longueur des mots.
+- **Fréquences lexicales** : table et histogramme, filtre, top N,
+  exclusion optionnelle des mots vides (FR/EN).
+- **Richesse lexicale** : TTR, indice de Guiraud, CTTR, constante C de
+  Herdan, indice a² de Maas, hapax legomena.
+- **Lisibilité** : Flesch Reading Ease & Flesch–Kincaid (EN),
+  adaptation Kandel & Moles (FR), indice LIX (indépendant de la langue).
+- **N-grammes & collocations** : bi/tri/quadri-grammes, cooccurrences
+  notées par information mutuelle ponctuelle (PMI).
+- **Concordance (KWIC)** : occurrences d'un mot-clé en contexte.
+- **Détection de langue** automatique (français / anglais).
+
+## Architecture
+
+```
+src/
+  libs/           logique d'analyse pure (testable, sans framework)
+    text.js         tokenisation mots/phrases/paragraphes, syllabes
+    stopwords.js    listes de mots vides FR/EN + détection de langue
+    linguistics.js  fréquences, diversité, n-grammes, collocations, KWIC
+    readability.js  indices de lisibilité
+  stores/
+    corpus.js       store Pinia (documents, document actif, réglages)
+  composables/
+    useAnalysis.js  analyses réactives mémoïsées du document actif
+  components/       UI Vue (gestionnaire de corpus + panneaux à onglets)
+```
+
+## Démarrage
+
+Prérequis : [Bun](https://bun.sh) (ou Node 18+).
+
+```bash
+bun install
+bun run dev       # serveur de développement
+bun run build     # build de production
+bun run preview   # prévisualisation du build
+```
+
+## IDE recommandé
+
+[VS Code](https://code.visualstudio.com/) +
+[Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+(désactiver Vetur).
