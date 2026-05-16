@@ -2,6 +2,8 @@
 import { ref, watch } from "vue";
 import { useAnalysis } from "../composables/useAnalysis.js";
 import { useCorpusStore } from "../stores/corpus.js";
+import { useI18n } from "../i18n/index.js";
+import { useNav } from "../composables/useNav.js";
 import DocumentManager from "./DocumentManager.vue";
 import OverviewPanel from "./panels/OverviewPanel.vue";
 import FrequencyPanel from "./panels/FrequencyPanel.vue";
@@ -15,6 +17,8 @@ import ReportView from "./ReportView.vue";
 
 const { document, hasContent } = useAnalysis();
 const store = useCorpusStore();
+const { t } = useI18n();
+const { open, close } = useNav();
 
 const draft = ref("");
 
@@ -24,109 +28,90 @@ function exportPdf() {
 
 function analyzeDraft() {
   if (!draft.value.trim()) return;
-  store.addDocument("Texte saisi", draft.value);
+  store.addDocument(t("mgr.pasted"), draft.value);
   draft.value = "";
 }
 
 const tabs = [
-  { id: "overview", label: "Vue d'ensemble", comp: OverviewPanel },
-  { id: "frequency", label: "Fréquences", comp: FrequencyPanel },
-  { id: "diversity", label: "Richesse lexicale", comp: DiversityPanel },
-  { id: "readability", label: "Lisibilité", comp: ReadabilityPanel },
-  { id: "sentiment", label: "Sentiment", comp: SentimentPanel },
-  { id: "speakers", label: "Locuteurs", comp: SpeakersPanel },
-  { id: "ngram", label: "N-grammes", comp: NgramPanel },
-  { id: "kwic", label: "Concordance", comp: ConcordancePanel },
+  { id: "overview", key: "tabs.overview", comp: OverviewPanel },
+  { id: "frequency", key: "tabs.frequency", comp: FrequencyPanel },
+  { id: "diversity", key: "tabs.diversity", comp: DiversityPanel },
+  { id: "readability", key: "tabs.readability", comp: ReadabilityPanel },
+  { id: "sentiment", key: "tabs.sentiment", comp: SentimentPanel },
+  { id: "speakers", key: "tabs.speakers", comp: SpeakersPanel },
+  { id: "ngram", key: "tabs.ngram", comp: NgramPanel },
+  { id: "kwic", key: "tabs.kwic", comp: ConcordancePanel },
 ];
 const active = ref("overview");
-const menuOpen = ref(false);
 
 // Sur mobile, refermer le tiroir dès qu'un document devient actif.
 watch(
   () => document.value?.id,
-  () => {
-    menuOpen.value = false;
-  }
+  () => close()
 );
 </script>
 
 <template>
   <div class="layout">
-    <button
-      class="menu-btn"
-      :aria-expanded="menuOpen"
-      @click="menuOpen = !menuOpen"
-    >
-      ☰ Corpus
-    </button>
+    <div v-if="open" class="backdrop" @click="close" />
 
-    <div
-      v-if="menuOpen"
-      class="backdrop"
-      @click="menuOpen = false"
-    />
-
-    <DocumentManager :class="{ open: menuOpen }" />
+    <DocumentManager :class="{ open }" />
 
     <main class="content">
       <template v-if="document && hasContent">
         <div class="doc-title">
           <h2>{{ document.name }}</h2>
           <button class="btn export-btn" @click="exportPdf">
-            ⤓ Exporter en PDF
+            {{ t("view.export") }}
           </button>
         </div>
         <nav class="tabs">
           <button
-            v-for="t in tabs"
-            :key="t.id"
-            :class="{ on: active === t.id }"
-            @click="active = t.id"
+            v-for="tab in tabs"
+            :key="tab.id"
+            :class="{ on: active === tab.id }"
+            @click="active = tab.id"
           >
-            {{ t.label }}
+            {{ t(tab.key) }}
           </button>
         </nav>
         <section class="panel">
-          <component :is="tabs.find((t) => t.id === active).comp" />
+          <component :is="tabs.find((x) => x.id === active).comp" />
         </section>
         <ReportView />
       </template>
 
       <div v-else class="empty">
         <div class="empty-card">
-          <h2>Bienvenue dans Mo-Grid</h2>
-          <p>
-            Écrivez ou collez votre texte ci-dessous pour lancer l'analyse —
-            ou importez un fichier (tous formats texte) depuis le panneau
-            Corpus.
-          </p>
+          <h2>{{ t("view.welcome") }}</h2>
+          <p>{{ t("view.welcomeDesc") }}</p>
 
           <div class="writer">
             <textarea
               v-model="draft"
               rows="8"
-              placeholder="Écrivez ou collez votre texte ici…"
+              :placeholder="t('view.placeholder')"
               @keydown.ctrl.enter="analyzeDraft"
               @keydown.meta.enter="analyzeDraft"
             />
             <div class="writer-bar">
-              <span class="hint">Astuce : Ctrl/⌘ + Entrée pour analyser</span>
+              <span class="hint">{{ t("view.hint") }}</span>
               <button
                 class="btn btn-primary"
                 :disabled="!draft.trim()"
                 @click="analyzeDraft"
               >
-                Analyser le texte
+                {{ t("view.analyze") }}
               </button>
             </div>
           </div>
 
           <ul>
-            <li>Statistiques de texte et longueur des mots</li>
-            <li>Fréquences lexicales et filtrage des mots vides</li>
-            <li>Richesse lexicale (TTR, Guiraud, Herdan, Maas…)</li>
-            <li>Lisibilité (Flesch, Kandel & Moles, LIX) et sentiment</li>
-            <li>N-grammes, collocations (PMI) et concordance (KWIC)</li>
+            <li>{{ t("view.feat1") }}</li>
+            <li>{{ t("view.feat2") }}</li>
+            <li>{{ t("view.feat3") }}</li>
+            <li>{{ t("view.feat4") }}</li>
+            <li>{{ t("view.feat5") }}</li>
           </ul>
         </div>
       </div>
@@ -140,21 +125,6 @@ watch(
   flex: 1;
   min-height: 0;
   position: relative;
-}
-.menu-btn {
-  display: none;
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  z-index: 60;
-  background: var(--accent);
-  color: #1a1100;
-  border: none;
-  border-radius: 999px;
-  padding: 0.7rem 1.1rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-  box-shadow: 0 4px 14px #0008;
 }
 .backdrop {
   display: none;
@@ -272,23 +242,13 @@ watch(
   margin: 1rem 0 0;
   padding-left: 1.1rem;
 }
-code {
-  font-family: var(--mono);
-  background: var(--surface-2);
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
-  font-size: 0.85em;
-}
 
 @media (max-width: 860px) {
-  .menu-btn {
-    display: block;
-  }
   .backdrop {
     display: block;
   }
   .content {
-    padding: 1.25rem 1rem 4.5rem;
+    padding: 1.25rem 1rem 2rem;
   }
 }
 </style>

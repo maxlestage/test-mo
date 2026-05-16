@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from "vue";
 import { useCorpusStore } from "../stores/corpus.js";
+import { useI18n } from "../i18n/index.js";
 
 const store = useCorpusStore();
+const { t } = useI18n();
 const active = ref(false);
 const fileInput = ref(null);
 
@@ -71,8 +73,8 @@ async function onPick(e) {
       hidden
       @change="onPick"
     />
-    <strong>Déposer des fichiers ici</strong>
-    <span>ou cliquer pour parcourir · tous formats texte</span>
+    <strong>{{ t("up.drop") }}</strong>
+    <span>{{ t("up.browse") }}</span>
   </div>
 </template>
 

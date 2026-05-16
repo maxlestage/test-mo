@@ -2,10 +2,12 @@
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "../stores/corpus.js";
+import { useI18n } from "../i18n/index.js";
 import Upload from "./Upload.vue";
 
 const store = useCorpusStore();
 const { documents, activeId, settings } = storeToRefs(store);
+const { t } = useI18n();
 
 const pasteName = ref("");
 const pasteText = ref("");
@@ -13,7 +15,7 @@ const showPaste = ref(false);
 
 function addPasted() {
   if (!pasteText.value.trim()) return;
-  store.addDocument(pasteName.value.trim() || "Texte collé", pasteText.value);
+  store.addDocument(pasteName.value.trim() || t("mgr.pasted"), pasteText.value);
   pasteName.value = "";
   pasteText.value = "";
   showPaste.value = false;
@@ -23,7 +25,7 @@ function addPasted() {
 <template>
   <aside class="manager">
     <section>
-      <h2>Corpus</h2>
+      <h2>{{ t("mgr.corpus") }}</h2>
       <ul v-if="documents.length" class="doc-list">
         <li
           v-for="doc in documents"
@@ -34,55 +36,57 @@ function addPasted() {
           <span class="doc-name" :title="doc.name">{{ doc.name }}</span>
           <button
             class="del"
-            title="Supprimer"
+            :title="t('mgr.delete')"
             @click.stop="store.removeDocument(doc.id)"
           >
             ✕
           </button>
         </li>
       </ul>
-      <p v-else class="muted">Aucun document. Importez ou collez un texte.</p>
+      <p v-else class="muted">{{ t("mgr.empty") }}</p>
     </section>
 
     <section class="actions">
       <Upload />
       <button class="btn btn-ghost" @click="showPaste = !showPaste">
-        {{ showPaste ? "Annuler" : "Coller un texte" }}
+        {{ showPaste ? t("mgr.cancel") : t("mgr.paste") }}
       </button>
       <div v-if="showPaste" class="paste">
-        <input v-model="pasteName" placeholder="Nom (optionnel)" />
+        <input v-model="pasteName" :placeholder="t('mgr.namePh')" />
         <textarea
           v-model="pasteText"
           rows="6"
-          placeholder="Collez votre texte ici…"
+          :placeholder="t('mgr.textPh')"
         />
-        <button class="btn btn-primary" @click="addPasted">Ajouter</button>
+        <button class="btn btn-primary" @click="addPasted">
+          {{ t("mgr.add") }}
+        </button>
       </div>
       <div class="row-btns">
         <button class="btn btn-ghost" @click="store.loadSamples()">
-          Charger des exemples
+          {{ t("mgr.samples") }}
         </button>
         <button
           v-if="documents.length"
           class="btn btn-ghost"
           @click="store.clearAll()"
         >
-          Tout effacer
+          {{ t("mgr.clear") }}
         </button>
       </div>
     </section>
 
     <section>
-      <h2>Réglages</h2>
+      <h2>{{ t("mgr.settings") }}</h2>
       <label class="field">
-        <span>Langue</span>
+        <span>{{ t("mgr.analysisLang") }}</span>
         <select
           :value="settings.language"
           @change="store.updateSettings({ language: $event.target.value })"
         >
-          <option value="auto">Détection auto</option>
-          <option value="fr">Français</option>
-          <option value="en">Anglais</option>
+          <option value="auto">{{ t("mgr.auto") }}</option>
+          <option value="fr">{{ t("mgr.fr") }}</option>
+          <option value="en">{{ t("mgr.en") }}</option>
         </select>
       </label>
       <label class="check">
@@ -91,7 +95,7 @@ function addPasted() {
           :checked="settings.removeStopwords"
           @change="store.updateSettings({ removeStopwords: $event.target.checked })"
         />
-        <span>Exclure les mots vides</span>
+        <span>{{ t("mgr.removeStop") }}</span>
       </label>
     </section>
   </aside>

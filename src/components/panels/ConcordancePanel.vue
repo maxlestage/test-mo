@@ -1,9 +1,11 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useAnalysis } from "../../composables/useAnalysis.js";
+import { useI18n } from "../../i18n/index.js";
 import { concordance } from "../../libs/linguistics.js";
 
 const { text } = useAnalysis();
+const { t } = useI18n();
 const keyword = ref("");
 const contextWords = ref(6);
 const caseSensitive = ref(false);
@@ -22,22 +24,24 @@ const lines = computed(() => {
     <div class="toolbar">
       <input
         v-model="keyword"
-        placeholder="Mot-clé à rechercher…"
+        :placeholder="t('kw.placeholder')"
         @keyup.enter="keyword = keyword.trim()"
       />
       <label>
-        Contexte
+        {{ t("kw.context") }}
         <select v-model.number="contextWords">
-          <option :value="4">4 mots</option>
-          <option :value="6">6 mots</option>
-          <option :value="10">10 mots</option>
+          <option :value="4">4 {{ t("kw.wordsN") }}</option>
+          <option :value="6">6 {{ t("kw.wordsN") }}</option>
+          <option :value="10">10 {{ t("kw.wordsN") }}</option>
         </select>
       </label>
       <label class="check">
         <input v-model="caseSensitive" type="checkbox" />
-        <span>Respecter la casse</span>
+        <span>{{ t("kw.case") }}</span>
       </label>
-      <span v-if="keyword.trim()" class="tag">{{ lines.length }} occurrence(s)</span>
+      <span v-if="keyword.trim()" class="tag">
+        {{ lines.length }} {{ t("kw.occ") }}
+      </span>
     </div>
 
     <div v-if="lines.length" class="lines">
@@ -47,9 +51,9 @@ const lines = computed(() => {
         <span class="right">{{ l.right }}</span>
       </div>
     </div>
-    <p v-else-if="keyword.trim()" class="muted">Aucune occurrence trouvée.</p>
+    <p v-else-if="keyword.trim()" class="muted">{{ t("kw.none") }}</p>
     <p v-else class="muted">
-      Saisissez un mot pour afficher ses occurrences en contexte (KWIC).
+      {{ t("kw.prompt") }}
     </p>
   </div>
 </template>
