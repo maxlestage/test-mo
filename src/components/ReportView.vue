@@ -11,8 +11,17 @@ import {
   interpretLix,
 } from "../libs/readability.js";
 
-const { document, stats, diversity, readability, sentiment, frequencies, words, lang } =
-  useAnalysis();
+const {
+  document,
+  stats,
+  diversity,
+  readability,
+  sentiment,
+  speakers,
+  frequencies,
+  words,
+  lang,
+} = useAnalysis();
 
 const date = new Date().toLocaleDateString("fr-FR", {
   year: "numeric",
@@ -97,6 +106,7 @@ const topWords = computed(() => frequencies.value.slice(0, 20));
 const topBigrams = computed(() =>
   ngrams(words.value, 2, { lang: lang.value, removeStopwords: true }).slice(0, 12)
 );
+const spk = computed(() => speakers.value);
 </script>
 
 <template>
@@ -197,6 +207,34 @@ const topBigrams = computed(() =>
       </table>
     </section>
 
+    <section v-if="spk.multi">
+      <h2>7. Analyse par locuteur</h2>
+      <p class="sub">
+        {{ spk.speakerCount }} locuteurs · {{ spk.turnCount }} interventions ·
+        humeur d'ensemble : {{ spk.overall.mood }}
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Locuteur</th>
+            <th>Interventions</th>
+            <th>Humeur</th>
+            <th>Positivité</th>
+            <th>Mots-clés</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="s in spk.speakers" :key="s.name">
+            <td>{{ s.name }}</td>
+            <td class="v">{{ s.turns }}</td>
+            <td>{{ s.mood }}</td>
+            <td class="v">{{ s.positivity }} / 100</td>
+            <td>{{ s.keywords.slice(0, 5).map((k) => k.word).join(", ") }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <footer>
       Généré localement par Mo-Grid — aucune donnée n'a été transmise sur le
       réseau. Méthodes : tokenisation Unicode, indices lexicaux standard,
@@ -257,6 +295,11 @@ td.v {
   font-family: "Courier New", monospace;
   text-align: right;
   white-space: nowrap;
+}
+.sub {
+  margin: 0 0 8px;
+  font-size: 11px;
+  color: #444;
 }
 footer {
   margin-top: 24px;
