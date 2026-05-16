@@ -1,29 +1,27 @@
 <script setup>
-import { computed } from "vue";
 import { useAnalysis } from "../../composables/useAnalysis.js";
+import { useI18n } from "../../i18n/index.js";
 
 const { speakers } = useAnalysis();
+const { t } = useI18n();
 
 const moodClass = (m) =>
   m === "positif" ? "level-easy" : m === "négatif" ? "level-hard" : "level-ok";
+const moodLabel = (m) => t("mood." + m);
 </script>
 
 <template>
   <div class="spk">
-    <p class="intro">
-      Détection automatique des intervenants (formats chat, transcription,
-      interview, export WhatsApp…). Pour chaque personne : son humeur, ses
-      mots-clés et un extrait représentatif. Analyse 100 % locale.
-    </p>
+    <p class="intro">{{ t("sp.intro") }}</p>
 
     <div class="overview">
       <div class="ov-head">
-        <h3>Idée générale</h3>
+        <h3>{{ t("sp.idea") }}</h3>
         <span class="tag">
           {{
             speakers.multi
-              ? `${speakers.speakerCount} locuteurs · ${speakers.turnCount} interventions`
-              : "Un seul locuteur détecté"
+              ? `${speakers.speakerCount} ${t("sp.speakersN")} · ${speakers.turnCount} ${t("sp.turns")}`
+              : t("sp.one")
           }}
         </span>
       </div>
@@ -32,41 +30,40 @@ const moodClass = (m) =>
           {{ k.word }} <em>{{ k.count }}</em>
         </span>
         <span v-if="!speakers.overall.idea.length" class="dim">
-          Texte trop court.
+          {{ t("sp.short") }}
         </span>
       </div>
       <p class="mood-line">
-        Humeur d'ensemble :
+        {{ t("sp.moodAll") }} :
         <strong :class="moodClass(speakers.overall.mood)">
-          {{ speakers.overall.mood }}
+          {{ moodLabel(speakers.overall.mood) }}
         </strong>
-        · positivité {{ speakers.overall.positivity }}/100
+        · {{ speakers.overall.positivity }}/100
       </p>
     </div>
 
-    <p v-if="!speakers.multi" class="note">
-      Aucun marqueur de dialogue (« Nom : … ») n'a été trouvé : le texte est
-      traité comme un seul auteur. Pour une analyse par personne, utilisez un
-      format du type <code>Alice : message</code> (chat, transcription,
-      interview, export de messagerie).
-    </p>
+    <p v-if="!speakers.multi" class="note">{{ t("sp.note") }}</p>
 
     <div class="grid">
       <div v-for="s in speakers.speakers" :key="s.name" class="card">
         <div class="card-top">
-          <span class="name">{{ s.name }}</span>
-          <span class="badge" :class="moodClass(s.mood)">{{ s.mood }}</span>
+          <span class="name">
+            {{ s.name === "Auteur" ? t("sp.author") : s.name }}
+          </span>
+          <span class="badge" :class="moodClass(s.mood)">
+            {{ moodLabel(s.mood) }}
+          </span>
         </div>
         <div class="meta">
-          {{ s.turns }} intervention(s) · {{ s.words }} mots
+          {{ s.turns }} {{ t("sp.intervN") }} · {{ s.words }} {{ t("sp.wordsN") }}
         </div>
         <div class="bar">
           <div class="bar-fill" :style="{ width: s.positivity + '%' }" />
         </div>
-        <div class="cap">Positivité {{ s.positivity }}/100</div>
+        <div class="cap">{{ s.positivity }}/100</div>
 
         <div class="kw">
-          <span class="kw-label">Mots-clés</span>
+          <span class="kw-label">{{ t("sp.kw") }}</span>
           <div class="chips">
             <span v-for="k in s.keywords.slice(0, 6)" :key="k.word" class="chip">
               {{ k.word }}

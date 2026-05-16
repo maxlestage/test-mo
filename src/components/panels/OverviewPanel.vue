@@ -1,19 +1,21 @@
 <script setup>
 import { computed } from "vue";
 import { useAnalysis } from "../../composables/useAnalysis.js";
+import { useI18n } from "../../i18n/index.js";
 import BarChart from "../BarChart.vue";
 
 const { stats, lang, wordLengths } = useAnalysis();
+const { t } = useI18n();
 
 const cards = computed(() => [
-  { label: "Mots", value: stats.value.words.toLocaleString("fr-FR") },
-  { label: "Mots uniques", value: stats.value.uniqueWords.toLocaleString("fr-FR") },
-  { label: "Phrases", value: stats.value.sentences.toLocaleString("fr-FR") },
-  { label: "Paragraphes", value: stats.value.paragraphs.toLocaleString("fr-FR") },
-  { label: "Caractères", value: stats.value.characters.toLocaleString("fr-FR") },
-  { label: "Sans espaces", value: stats.value.charactersNoSpaces.toLocaleString("fr-FR") },
-  { label: "Long. moy. mot", value: stats.value.avgWordLength.toFixed(2) },
-  { label: "Mots / phrase", value: stats.value.avgSentenceLength.toFixed(1) },
+  { label: t("ov.words"), value: stats.value.words.toLocaleString() },
+  { label: t("ov.unique"), value: stats.value.uniqueWords.toLocaleString() },
+  { label: t("ov.sentences"), value: stats.value.sentences.toLocaleString() },
+  { label: t("ov.paragraphs"), value: stats.value.paragraphs.toLocaleString() },
+  { label: t("ov.chars"), value: stats.value.characters.toLocaleString() },
+  { label: t("ov.charsNs"), value: stats.value.charactersNoSpaces.toLocaleString() },
+  { label: t("ov.awl"), value: stats.value.avgWordLength.toFixed(2) },
+  { label: t("ov.wps"), value: stats.value.avgSentenceLength.toFixed(1) },
 ]);
 
 const readingTime = computed(() => {
@@ -23,16 +25,19 @@ const readingTime = computed(() => {
 });
 
 const lengthChart = computed(() =>
-  wordLengths.value.map((d) => ({ label: `${d.length} lettres`, value: d.count }))
+  wordLengths.value.map((d) => ({
+    label: `${d.length} ${t("ov.letters")}`,
+    value: d.count,
+  }))
 );
 </script>
 
 <template>
   <div class="overview">
     <div class="meta">
-      <span class="tag">Langue : {{ lang === "fr" ? "français" : "anglais" }}</span>
-      <span class="tag">Temps de lecture ≈ {{ readingTime }}</span>
-      <span class="tag">Mot le plus long : {{ stats.longestWord || "—" }}</span>
+      <span class="tag">{{ t("ov.lang") }} : {{ lang === "fr" ? t("mgr.fr") : t("mgr.en") }}</span>
+      <span class="tag">{{ t("ov.reading") }} ≈ {{ readingTime }}</span>
+      <span class="tag">{{ t("ov.longest") }} : {{ stats.longestWord || "—" }}</span>
     </div>
 
     <div class="grid">
@@ -43,7 +48,7 @@ const lengthChart = computed(() =>
     </div>
 
     <div class="block">
-      <h3>Distribution de la longueur des mots</h3>
+      <h3>{{ t("ov.distTitle") }}</h3>
       <BarChart :data="lengthChart" />
     </div>
   </div>
