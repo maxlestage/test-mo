@@ -3,13 +3,14 @@ import View from "./components/View.vue";
 import { useTheme } from "./composables/useTheme.js";
 
 const { theme, toggle } = useTheme();
+const logoUrl = import.meta.env.BASE_URL + "orange-logo.svg";
 </script>
 
 <template>
   <div class="app">
     <header class="app-header">
       <div class="brand">
-        <span class="logo">M</span>
+        <img :src="logoUrl" class="logo" alt="Orange" />
         <div>
           <h1>Mo-Grid</h1>
           <p>Atelier d'analyse linguistique de texte</p>
@@ -74,12 +75,8 @@ const { theme, toggle } = useTheme();
   width: 38px;
   height: 38px;
   border-radius: 9px;
-  background: var(--accent);
-  color: #1a1100;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 1.3rem;
+  object-fit: contain;
+  display: block;
 }
 .brand h1 {
   font-size: 1.15rem;
