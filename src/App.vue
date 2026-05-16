@@ -1,5 +1,8 @@
 <script setup>
 import View from "./components/View.vue";
+import { useTheme } from "./composables/useTheme.js";
+
+const { theme, toggle } = useTheme();
 </script>
 
 <template>
@@ -12,7 +15,17 @@ import View from "./components/View.vue";
           <p>Atelier d'analyse linguistique de texte</p>
         </div>
       </div>
-      <span class="tag">100 % local · aucune donnée envoyée</span>
+      <div class="header-right">
+        <span class="tag">100 % local · aucune donnée envoyée</span>
+        <button
+          class="theme-btn"
+          :title="theme === 'dark' ? 'Passer en thème clair' : 'Passer en thème sombre'"
+          :aria-label="theme === 'dark' ? 'Thème clair' : 'Thème sombre'"
+          @click="toggle"
+        >
+          {{ theme === "dark" ? "☀ Clair" : "☾ Sombre" }}
+        </button>
+      </div>
     </header>
     <View />
   </div>
@@ -31,6 +44,26 @@ import View from "./components/View.vue";
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.theme-btn {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
+}
+.theme-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .brand {
   display: flex;
