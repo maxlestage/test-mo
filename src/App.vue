@@ -1,9 +1,9 @@
 <script setup>
 import View from "./components/View.vue";
 import { useTheme } from "./composables/useTheme.js";
+import logoUrl from "./assets/orange-logo.svg";
 
 const { theme, toggle } = useTheme();
-const logoUrl = import.meta.env.BASE_URL + "orange-logo.svg";
 </script>
 
 <template>
