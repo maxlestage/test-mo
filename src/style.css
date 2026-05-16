@@ -101,3 +101,32 @@ a {
 .level-hard {
   color: var(--hard);
 }
+
+/* Rapport PDF : masqué à l'écran, seul élément visible à l'impression. */
+.print-report {
+  display: none;
+}
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+  }
+  body * {
+    visibility: hidden;
+  }
+  .print-report,
+  .print-report * {
+    visibility: visible;
+  }
+  .print-report {
+    display: block !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

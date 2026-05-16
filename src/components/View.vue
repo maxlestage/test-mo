@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useAnalysis } from "../composables/useAnalysis.js";
+import { useCorpusStore } from "../stores/corpus.js";
 import DocumentManager from "./DocumentManager.vue";
 import OverviewPanel from "./panels/OverviewPanel.vue";
 import FrequencyPanel from "./panels/FrequencyPanel.vue";
@@ -9,8 +10,22 @@ import ReadabilityPanel from "./panels/ReadabilityPanel.vue";
 import NgramPanel from "./panels/NgramPanel.vue";
 import ConcordancePanel from "./panels/ConcordancePanel.vue";
 import SentimentPanel from "./panels/SentimentPanel.vue";
+import ReportView from "./ReportView.vue";
 
 const { document, hasContent } = useAnalysis();
+const store = useCorpusStore();
+
+const draft = ref("");
+
+function exportPdf() {
+  window.print();
+}
+
+function analyzeDraft() {
+  if (!draft.value.trim()) return;
+  store.addDocument("Texte saisi", draft.value);
+  draft.value = "";
+}
 
 const tabs = [
   { id: "overview", label: "Vue d'ensemble", comp: OverviewPanel },
@@ -55,6 +70,9 @@ watch(
       <template v-if="document && hasContent">
         <div class="doc-title">
           <h2>{{ document.name }}</h2>
+          <button class="btn export-btn" @click="exportPdf">
+            ⤓ Exporter en PDF
+          </button>
         </div>
         <nav class="tabs">
           <button
@@ -69,21 +87,43 @@ watch(
         <section class="panel">
           <component :is="tabs.find((t) => t.id === active).comp" />
         </section>
+        <ReportView />
       </template>
 
       <div v-else class="empty">
         <div class="empty-card">
           <h2>Bienvenue dans Mo-Grid</h2>
           <p>
-            Importez un fichier <code>.txt</code>/<code>.md</code>, collez un
-            texte ou chargez les exemples depuis le panneau Corpus pour lancer
-            l'analyse linguistique.
+            Écrivez ou collez votre texte ci-dessous pour lancer l'analyse —
+            ou importez un fichier (tous formats texte) depuis le panneau
+            Corpus.
           </p>
+
+          <div class="writer">
+            <textarea
+              v-model="draft"
+              rows="8"
+              placeholder="Écrivez ou collez votre texte ici…"
+              @keydown.ctrl.enter="analyzeDraft"
+              @keydown.meta.enter="analyzeDraft"
+            />
+            <div class="writer-bar">
+              <span class="hint">Astuce : Ctrl/⌘ + Entrée pour analyser</span>
+              <button
+                class="btn btn-primary"
+                :disabled="!draft.trim()"
+                @click="analyzeDraft"
+              >
+                Analyser le texte
+              </button>
+            </div>
+          </div>
+
           <ul>
             <li>Statistiques de texte et longueur des mots</li>
             <li>Fréquences lexicales et filtrage des mots vides</li>
             <li>Richesse lexicale (TTR, Guiraud, Herdan, Maas…)</li>
-            <li>Indices de lisibilité (Flesch, Kandel & Moles, LIX)</li>
+            <li>Lisibilité (Flesch, Kandel & Moles, LIX) et sentiment</li>
             <li>N-grammes, collocations (PMI) et concordance (KWIC)</li>
           </ul>
         </div>
@@ -127,10 +167,24 @@ watch(
   padding: 1.5rem 2rem;
   overflow-y: auto;
 }
+.doc-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
 .doc-title h2 {
   font-size: 1.05rem;
-  margin-bottom: 1rem;
   word-break: break-word;
+}
+.export-btn {
+  flex-shrink: 0;
+  font-weight: 600;
+}
+.export-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .tabs {
   display: flex;
@@ -165,11 +219,41 @@ watch(
   height: 100%;
 }
 .empty-card {
-  max-width: 520px;
+  max-width: 640px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 2rem;
+}
+.writer {
+  margin: 1.25rem 0;
+}
+.writer textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding: 0.75rem;
+  resize: vertical;
+}
+.writer textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.writer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+.writer-bar .hint {
+  font-size: 0.76rem;
+  color: var(--text-dim);
 }
 .empty-card h2 {
   margin-bottom: 0.75rem;
