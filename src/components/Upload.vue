@@ -6,12 +6,6 @@ const store = useCorpusStore();
 const active = ref(false);
 const fileInput = ref(null);
 
-const ACCEPT = [".txt", ".md", ".text", ".csv"];
-
-function accepted(name) {
-  return ACCEPT.some((ext) => name.toLowerCase().endsWith(ext));
-}
-
 function readFile(file) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -21,11 +15,31 @@ function readFile(file) {
   });
 }
 
+// Tout format est accepté : le contenu est lu comme texte. Les
+// balises HTML/XML sont retirées pour ne garder que le texte utile.
+function toText(name, raw) {
+  const isMarkup =
+    /\.(html?|xml|svg|xhtml)$/i.test(name) || /^\s*<(!doctype|html|\?xml)/i.test(raw);
+  if (!isMarkup) return raw;
+  return raw
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&quot;/gi, '"')
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n");
+}
+
 async function ingest(files) {
   for (const file of files) {
-    if (!accepted(file.name)) continue;
-    const content = await readFile(file);
-    store.addDocument(file.name, content);
+    const raw = await readFile(file);
+    const content = toText(file.name, raw);
+    if (content.trim()) store.addDocument(file.name, content);
   }
 }
 
@@ -54,12 +68,11 @@ async function onPick(e) {
       ref="fileInput"
       type="file"
       multiple
-      accept=".txt,.md,.text,.csv"
       hidden
       @change="onPick"
     />
     <strong>Déposer des fichiers ici</strong>
-    <span>ou cliquer pour parcourir · .txt .md .csv</span>
+    <span>ou cliquer pour parcourir · tous formats texte</span>
   </div>
 </template>
 
@@ -74,6 +87,7 @@ async function onPick(e) {
   gap: 0.25rem;
   color: var(--text-dim);
   transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
 }
 .dropzone:hover {
   border-color: var(--accent);
