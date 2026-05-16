@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from "vue";
 import { useAnalysis } from "../composables/useAnalysis.js";
+import { useI18n } from "../i18n/index.js";
 import { ngrams } from "../libs/linguistics.js";
 import {
   fleschReadingEase,
@@ -22,41 +23,52 @@ const {
   words,
   lang,
 } = useAnalysis();
+const { t } = useI18n();
 
-const date = new Date().toLocaleDateString("fr-FR", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const date = computed(() =>
+  new Date().toLocaleDateString(t("rp.dateLocale"), {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+);
 
-const num = (v, d = 2) =>
-  typeof v === "number" ? v.toFixed(d) : v;
+const num = (v, d = 2) => (typeof v === "number" ? v.toFixed(d) : v);
+
+const lvl = (level) =>
+  level === "easy"
+    ? t("rd.lvlEasy")
+    : level === "hard"
+    ? t("rd.lvlHard")
+    : level === "ok"
+    ? t("rd.lvlOk")
+    : "—";
 
 const general = computed(() => {
   const s = stats.value;
   return [
-    ["Mots", s.words],
-    ["Mots uniques", s.uniqueWords],
-    ["Phrases", s.sentences],
-    ["Paragraphes", s.paragraphs],
-    ["Caractères", s.characters],
-    ["Caractères (sans espaces)", s.charactersNoSpaces],
-    ["Longueur moyenne d'un mot", num(s.avgWordLength)],
-    ["Mots par phrase", num(s.avgSentenceLength, 1)],
-    ["Temps de lecture estimé", `${Math.max(1, Math.round(s.readingTimeMin))} min`],
-    ["Mot le plus long", s.longestWord || "—"],
+    [t("ov.words"), s.words],
+    [t("ov.unique"), s.uniqueWords],
+    [t("ov.sentences"), s.sentences],
+    [t("ov.paragraphs"), s.paragraphs],
+    [t("ov.chars"), s.characters],
+    [t("rp.charsNs"), s.charactersNoSpaces],
+    [t("rp.awl"), num(s.avgWordLength)],
+    [t("ov.wps"), num(s.avgSentenceLength, 1)],
+    [t("rp.reading"), `${Math.max(1, Math.round(s.readingTimeMin))} min`],
+    [t("ov.longest"), s.longestWord || "—"],
   ];
 });
 
 const lexical = computed(() => {
   const d = diversity.value;
   return [
-    ["Type-Token Ratio (TTR)", num(d.ttr, 4)],
-    ["Indice de Guiraud", num(d.guiraud, 3)],
-    ["CTTR (corrigé)", num(d.cttr, 3)],
-    ["Constante C de Herdan", num(d.herdanC, 4)],
-    ["Indice a² de Maas", num(d.maas, 5)],
-    ["Hapax legomena", `${d.hapax} (${num(d.hapaxRatio * 100, 1)} %)`],
+    [t("dv.ttr"), num(d.ttr, 4)],
+    [t("dv.guiraud"), num(d.guiraud, 3)],
+    [t("dv.cttr"), num(d.cttr, 3)],
+    [t("dv.herdan"), num(d.herdanC, 4)],
+    [t("dv.maas"), num(d.maas, 5)],
+    [t("dv.hapax"), `${d.hapax} (${num(d.hapaxRatio * 100, 1)} %)`],
   ];
 });
 
@@ -68,36 +80,36 @@ const readScores = computed(() => {
     rows.push([
       "Flesch — Kandel & Moles (FR)",
       km == null ? "—" : num(km, 1),
-      interpretFlesch(km).label,
+      lvl(interpretFlesch(km).level),
     ]);
   } else {
     const fre = fleschReadingEase(r);
     rows.push([
       "Flesch Reading Ease (EN)",
       fre == null ? "—" : num(fre, 1),
-      interpretFlesch(fre).label,
+      lvl(interpretFlesch(fre).level),
     ]);
     const fk = fleschKincaidGrade(r);
     rows.push([
       "Flesch–Kincaid Grade",
       fk == null ? "—" : num(fk, 1),
-      fk == null ? "—" : `Niveau ≈ ${Math.max(0, Math.round(fk))}`,
+      fk == null ? "—" : `${t("rd.grade")} ${Math.max(0, Math.round(fk))}`,
     ]);
   }
   const lx = lix(r);
-  rows.push(["LIX", lx == null ? "—" : num(lx, 1), interpretLix(lx).label]);
+  rows.push(["LIX", lx == null ? "—" : num(lx, 1), lvl(interpretLix(lx).level)]);
   return rows;
 });
 
 const senti = computed(() => {
   const s = sentiment.value;
   return [
-    ["Tonalité globale", s.label],
-    ["Indice de positivité", `${s.positivity} / 100`],
-    ["Score moyen par phrase", num(s.meanPerSentence)],
+    [t("st.global"), t("mood." + s.label)],
+    [t("st.positivity"), `${s.positivity} / 100`],
+    [t("st.mean"), num(s.meanPerSentence)],
     [
-      "Répartition des phrases",
-      `${s.counts.positif} positives · ${s.counts.neutre} neutres · ${s.counts["négatif"]} négatives`,
+      t("st.dist"),
+      `${s.counts.positif} ${t("st.pos")} · ${s.counts.neutre} ${t("st.neu")} · ${s.counts["négatif"]} ${t("st.neg")}`,
     ],
   ];
 });
@@ -112,16 +124,16 @@ const spk = computed(() => speakers.value);
 <template>
   <div class="print-report">
     <header>
-      <h1>Mo-Grid — Rapport d'analyse linguistique</h1>
+      <h1>{{ t("rp.title") }}</h1>
       <p class="meta">
-        Document : <strong>{{ document?.name || "—" }}</strong> ·
-        Langue : {{ lang === "fr" ? "français" : "anglais" }} ·
-        Édité le {{ date }}
+        {{ t("rp.document") }} : <strong>{{ document?.name || "—" }}</strong> ·
+        {{ t("ov.lang") }} : {{ lang === "fr" ? t("mgr.fr") : t("mgr.en") }} ·
+        {{ t("rp.edited") }} {{ date }}
       </p>
     </header>
 
     <section>
-      <h2>1. Statistiques générales</h2>
+      <h2>{{ t("rp.s1") }}</h2>
       <table>
         <tbody>
           <tr v-for="[k, v] in general" :key="k">
@@ -133,7 +145,7 @@ const spk = computed(() => speakers.value);
     </section>
 
     <section>
-      <h2>2. Richesse lexicale</h2>
+      <h2>{{ t("rp.s2") }}</h2>
       <table>
         <tbody>
           <tr v-for="[k, v] in lexical" :key="k">
@@ -145,10 +157,14 @@ const spk = computed(() => speakers.value);
     </section>
 
     <section>
-      <h2>3. Lisibilité</h2>
+      <h2>{{ t("rp.s3") }}</h2>
       <table>
         <thead>
-          <tr><th>Indice</th><th>Score</th><th>Interprétation</th></tr>
+          <tr>
+            <th>{{ t("rp.colIndex") }}</th>
+            <th>{{ t("rp.colScore") }}</th>
+            <th>{{ t("rp.colInterp") }}</th>
+          </tr>
         </thead>
         <tbody>
           <tr v-for="row in readScores" :key="row[0]">
@@ -161,7 +177,7 @@ const spk = computed(() => speakers.value);
     </section>
 
     <section>
-      <h2>4. Analyse de sentiment</h2>
+      <h2>{{ t("rp.s4") }}</h2>
       <table>
         <tbody>
           <tr v-for="[k, v] in senti" :key="k">
@@ -173,10 +189,15 @@ const spk = computed(() => speakers.value);
     </section>
 
     <section>
-      <h2>5. Mots les plus fréquents</h2>
+      <h2>{{ t("rp.s5") }}</h2>
       <table>
         <thead>
-          <tr><th>#</th><th>Mot</th><th>Occurrences</th><th>Fréquence</th></tr>
+          <tr>
+            <th>#</th>
+            <th>{{ t("fq.word") }}</th>
+            <th>{{ t("fq.occ") }}</th>
+            <th>{{ t("fq.freq") }}</th>
+          </tr>
         </thead>
         <tbody>
           <tr v-for="(f, i) in topWords" :key="f.word">
@@ -190,10 +211,10 @@ const spk = computed(() => speakers.value);
     </section>
 
     <section>
-      <h2>6. Bigrammes marquants</h2>
+      <h2>{{ t("rp.s6") }}</h2>
       <table>
         <thead>
-          <tr><th>Bigramme</th><th>Occurrences</th></tr>
+          <tr><th>{{ t("ng.bigram") }}</th><th>{{ t("fq.occ") }}</th></tr>
         </thead>
         <tbody>
           <tr v-for="g in topBigrams" :key="g.gram">
@@ -201,33 +222,34 @@ const spk = computed(() => speakers.value);
             <td class="v">{{ g.count }}</td>
           </tr>
           <tr v-if="!topBigrams.length">
-            <td colspan="2">Texte trop court.</td>
+            <td colspan="2">{{ t("ng.short") }}</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section v-if="spk.multi">
-      <h2>7. Analyse par locuteur</h2>
+      <h2>{{ t("rp.s7") }}</h2>
       <p class="sub">
-        {{ spk.speakerCount }} locuteurs · {{ spk.turnCount }} interventions ·
-        humeur d'ensemble : {{ spk.overall.mood }}
+        {{ spk.speakerCount }} {{ t("sp.speakersN") }} ·
+        {{ spk.turnCount }} {{ t("sp.turns") }} ·
+        {{ t("sp.moodAll") }} : {{ t("mood." + spk.overall.mood) }}
       </p>
       <table>
         <thead>
           <tr>
-            <th>Locuteur</th>
-            <th>Interventions</th>
-            <th>Humeur</th>
-            <th>Positivité</th>
-            <th>Mots-clés</th>
+            <th>{{ t("rp.spkName") }}</th>
+            <th>{{ t("sp.turns") }}</th>
+            <th>{{ t("rp.mood") }}</th>
+            <th>{{ t("rp.positivity") }}</th>
+            <th>{{ t("sp.kw") }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="s in spk.speakers" :key="s.name">
-            <td>{{ s.name }}</td>
+            <td>{{ s.name === "Auteur" ? t("sp.author") : s.name }}</td>
             <td class="v">{{ s.turns }}</td>
-            <td>{{ s.mood }}</td>
+            <td>{{ t("mood." + s.mood) }}</td>
             <td class="v">{{ s.positivity }} / 100</td>
             <td>{{ s.keywords.slice(0, 5).map((k) => k.word).join(", ") }}</td>
           </tr>
@@ -235,11 +257,7 @@ const spk = computed(() => speakers.value);
       </table>
     </section>
 
-    <footer>
-      Généré localement par Mo-Grid — aucune donnée n'a été transmise sur le
-      réseau. Méthodes : tokenisation Unicode, indices lexicaux standard,
-      lisibilité (Flesch / Kandel & Moles / LIX), sentiment lexical FR/EN.
-    </footer>
+    <footer>{{ t("rp.footer") }}</footer>
   </div>
 </template>
 
