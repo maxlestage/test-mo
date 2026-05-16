@@ -1,96 +1,99 @@
 <script setup>
 import { computed } from "vue";
 import { useAnalysis } from "../../composables/useAnalysis.js";
+import { useI18n } from "../../i18n/index.js";
 import BarChart from "../BarChart.vue";
 
 const { sentiment } = useAnalysis();
+const { t } = useI18n();
 
 const levelClass = computed(() => {
   const l = sentiment.value.label;
   return l === "positif" ? "level-easy" : l === "négatif" ? "level-hard" : "level-ok";
 });
 
+const moodLabel = computed(() => t("mood." + sentiment.value.label));
+
 const distribution = computed(() => {
   const c = sentiment.value.counts;
   return [
-    { label: "Positives", value: c.positif },
-    { label: "Neutres", value: c.neutre },
-    { label: "Négatives", value: c["négatif"] },
+    { label: t("st.pos"), value: c.positif },
+    { label: t("st.neu"), value: c.neutre },
+    { label: t("st.neg"), value: c["négatif"] },
   ];
 });
 </script>
 
 <template>
   <div class="senti">
-    <p class="intro">
-      Détection lexicale du ressenti exprimé dans le texte (lexique
-      français/anglais, gestion de la négation et des adverbes d'intensité).
-      Analyse purement locale — aucune donnée n'est envoyée.
-    </p>
+    <p class="intro">{{ t("st.intro") }}</p>
 
     <div class="top">
       <div class="verdict">
-        <span class="kicker">Tonalité globale</span>
-        <span class="label" :class="levelClass">
-          {{ sentiment.label }}
-        </span>
+        <span class="kicker">{{ t("st.global") }}</span>
+        <span class="label" :class="levelClass">{{ moodLabel }}</span>
         <div class="gauge">
           <div class="gauge-fill" :style="{ width: sentiment.positivity + '%' }" />
         </div>
         <span class="gauge-cap">
-          Indice de positivité : <strong>{{ sentiment.positivity }}/100</strong>
+          {{ t("st.positivity") }} :
+          <strong>{{ sentiment.positivity }}/100</strong>
         </span>
       </div>
 
       <div class="mini">
         <div class="stat">
           <span class="num">{{ sentiment.meanPerSentence.toFixed(2) }}</span>
-          <span class="cap">Score moyen / phrase</span>
+          <span class="cap">{{ t("st.mean") }}</span>
         </div>
         <div class="stat">
           <span class="num">{{ sentiment.sentenceCount }}</span>
-          <span class="cap">Phrases analysées</span>
+          <span class="cap">{{ t("st.sentences") }}</span>
         </div>
         <div class="stat">
           <span class="num">{{ sentiment.analyzedWords }}</span>
-          <span class="cap">Mots porteurs d'émotion</span>
+          <span class="cap">{{ t("st.emo") }}</span>
         </div>
       </div>
     </div>
 
     <div class="block">
-      <h3>Répartition des phrases</h3>
+      <h3>{{ t("st.dist") }}</h3>
       <BarChart :data="distribution" />
     </div>
 
     <div class="cols">
       <section class="block">
-        <h3>Mots positifs marquants</h3>
+        <h3>{{ t("st.posWords") }}</h3>
         <ul class="words">
           <li v-for="w in sentiment.topPositive" :key="w.word">
             <span class="mono">{{ w.word }}</span>
             <span class="pos">+{{ w.total.toFixed(1) }}</span>
             <span class="dim">×{{ w.count }}</span>
           </li>
-          <li v-if="!sentiment.topPositive.length" class="dim">Aucun</li>
+          <li v-if="!sentiment.topPositive.length" class="dim">
+            {{ t("st.none") }}
+          </li>
         </ul>
       </section>
       <section class="block">
-        <h3>Mots négatifs marquants</h3>
+        <h3>{{ t("st.negWords") }}</h3>
         <ul class="words">
           <li v-for="w in sentiment.topNegative" :key="w.word">
             <span class="mono">{{ w.word }}</span>
             <span class="neg">{{ w.total.toFixed(1) }}</span>
             <span class="dim">×{{ w.count }}</span>
           </li>
-          <li v-if="!sentiment.topNegative.length" class="dim">Aucun</li>
+          <li v-if="!sentiment.topNegative.length" class="dim">
+            {{ t("st.none") }}
+          </li>
         </ul>
       </section>
     </div>
 
     <div class="cols">
       <section class="block">
-        <h3>Phrases les plus positives</h3>
+        <h3>{{ t("st.posPhr") }}</h3>
         <p
           v-for="(s, i) in sentiment.mostPositive"
           :key="'p' + i"
@@ -99,10 +102,12 @@ const distribution = computed(() => {
           <span class="badge pos">+{{ s.score.toFixed(1) }}</span>
           {{ s.text }}
         </p>
-        <p v-if="!sentiment.mostPositive.length" class="dim">Aucune.</p>
+        <p v-if="!sentiment.mostPositive.length" class="dim">
+          {{ t("st.none") }}
+        </p>
       </section>
       <section class="block">
-        <h3>Phrases les plus négatives</h3>
+        <h3>{{ t("st.negPhr") }}</h3>
         <p
           v-for="(s, i) in sentiment.mostNegative"
           :key="'n' + i"
@@ -111,7 +116,9 @@ const distribution = computed(() => {
           <span class="badge neg">{{ s.score.toFixed(1) }}</span>
           {{ s.text }}
         </p>
-        <p v-if="!sentiment.mostNegative.length" class="dim">Aucune.</p>
+        <p v-if="!sentiment.mostNegative.length" class="dim">
+          {{ t("st.none") }}
+        </p>
       </section>
     </div>
   </div>
