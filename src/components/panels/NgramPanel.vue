@@ -1,10 +1,12 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useAnalysis } from "../../composables/useAnalysis.js";
+import { useI18n } from "../../i18n/index.js";
 import { ngrams, collocations } from "../../libs/linguistics.js";
 import BarChart from "../BarChart.vue";
 
 const { words, lang, settings } = useAnalysis();
+const { t } = useI18n();
 const n = ref(2);
 
 const grams = computed(() =>
@@ -28,7 +30,7 @@ const colloc = computed(() =>
     <div class="cols">
       <section class="block">
         <div class="block-head">
-          <h3>N-grammes</h3>
+          <h3>{{ t("ng.title") }}</h3>
           <div class="seg">
             <button
               v-for="k in [2, 3, 4]"
@@ -36,7 +38,7 @@ const colloc = computed(() =>
               :class="{ on: n === k }"
               @click="n = k"
             >
-              {{ k }}-grammes
+              {{ k }}{{ t("ng.grams") }}
             </button>
           </div>
         </div>
@@ -44,17 +46,14 @@ const colloc = computed(() =>
       </section>
 
       <section class="block">
-        <h3>Collocations (par PMI)</h3>
-        <p class="muted">
-          Cooccurrences plus fréquentes que ne le voudrait le hasard
-          (information mutuelle ponctuelle, mots vides exclus).
-        </p>
+        <h3>{{ t("ng.colloc") }}</h3>
+        <p class="muted">{{ t("ng.collocDesc") }}</p>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Bigramme</th>
-                <th>Occ.</th>
+                <th>{{ t("ng.bigram") }}</th>
+                <th>{{ t("ng.occ") }}</th>
                 <th>PMI</th>
               </tr>
             </thead>
@@ -65,7 +64,7 @@ const colloc = computed(() =>
                 <td class="dim">{{ c.pmi.toFixed(2) }}</td>
               </tr>
               <tr v-if="!colloc.length">
-                <td colspan="3" class="dim">Texte trop court.</td>
+                <td colspan="3" class="dim">{{ t("ng.short") }}</td>
               </tr>
             </tbody>
           </table>

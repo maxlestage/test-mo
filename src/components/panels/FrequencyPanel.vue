@@ -1,9 +1,11 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useAnalysis } from "../../composables/useAnalysis.js";
+import { useI18n } from "../../i18n/index.js";
 import BarChart from "../BarChart.vue";
 
 const { frequencies, settings } = useAnalysis();
+const { t } = useI18n();
 const query = ref("");
 const topN = ref(25);
 
@@ -24,9 +26,9 @@ const chartData = computed(() =>
 <template>
   <div class="freq">
     <div class="toolbar">
-      <input v-model="query" placeholder="Filtrer un mot…" />
+      <input v-model="query" :placeholder="t('fq.filter')" />
       <label>
-        Top
+        {{ t("fq.top") }}
         <select v-model.number="topN">
           <option :value="10">10</option>
           <option :value="25">25</option>
@@ -35,7 +37,7 @@ const chartData = computed(() =>
         </select>
       </label>
       <span class="tag">
-        Mots vides {{ settings.removeStopwords ? "exclus" : "inclus" }}
+        {{ settings.removeStopwords ? t("fq.stopExcl") : t("fq.stopIncl") }}
       </span>
     </div>
 
@@ -51,9 +53,9 @@ const chartData = computed(() =>
         <thead>
           <tr>
             <th>#</th>
-            <th>Mot</th>
-            <th>Occurrences</th>
-            <th>Fréquence</th>
+            <th>{{ t("fq.word") }}</th>
+            <th>{{ t("fq.occ") }}</th>
+            <th>{{ t("fq.freq") }}</th>
           </tr>
         </thead>
         <tbody>
