@@ -35,6 +35,13 @@ const date = computed(() =>
 
 const num = (v, d = 2) => (typeof v === "number" ? v.toFixed(d) : v);
 
+function spkName(name) {
+  if (name === "Auteur") return t("sp.author");
+  if (name === "?") return t("sp.unknown");
+  const m = name.match(/^Locuteur (\d+)$/);
+  return m ? `${t("sp.voice")} ${m[1]}` : name;
+}
+
 const lvl = (level) =>
   level === "easy"
     ? t("rd.lvlEasy")
@@ -231,7 +238,7 @@ const spk = computed(() => speakers.value);
     <section v-if="spk.multi">
       <h2>{{ t("rp.s7") }}</h2>
       <p class="sub">
-        {{ spk.speakerCount }} {{ t("sp.speakersN") }} ·
+        {{ t("sp.multiYes") }} — {{ spk.speakerCount }} {{ t("sp.speakersN") }} ·
         {{ spk.turnCount }} {{ t("sp.turns") }} ·
         {{ t("sp.moodAll") }} : {{ t("mood." + spk.overall.mood) }}
       </p>
@@ -247,7 +254,7 @@ const spk = computed(() => speakers.value);
         </thead>
         <tbody>
           <tr v-for="s in spk.speakers" :key="s.name">
-            <td>{{ s.name === "Auteur" ? t("sp.author") : s.name }}</td>
+            <td>{{ spkName(s.name) }}</td>
             <td class="v">{{ s.turns }}</td>
             <td>{{ t("mood." + s.mood) }}</td>
             <td class="v">{{ s.positivity }} / 100</td>
