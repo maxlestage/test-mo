@@ -95,6 +95,11 @@ function displayName(name) {
         <blockquote v-if="s.highlight" :class="moodClass(s.mood)">
           « {{ s.highlight.text }} »
         </blockquote>
+
+        <div v-if="s.text" class="full">
+          <span class="full-label">{{ t("sp.fullReview") }}</span>
+          <p class="full-text">{{ s.text }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -254,6 +259,30 @@ blockquote.level-hard {
 }
 blockquote.level-ok {
   border-left-color: var(--warn);
+}
+.full {
+  margin-top: 0.85rem;
+}
+.full-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.full-text {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 180px;
+  overflow-y: auto;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
 }
 .dim {
   color: var(--text-dim);
