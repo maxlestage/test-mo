@@ -460,7 +460,26 @@ export function analyzeSpeakers(text) {
     };
   });
 
-  const overallSenti = analyzeSentiment(text);
+  // L'humeur d'ensemble est l'agrégat (pondéré par la taille) des
+  // sentiments par personne, et non une passe lexicale séparée :
+  // ainsi le global reste cohérent avec les individus.
+  const totW = perSpeaker.reduce((a, s) => a + (s.words || 0), 0);
+  const overallPositivity =
+    perSpeaker.length === 0
+      ? 50
+      : totW > 0
+      ? Math.round(
+          perSpeaker.reduce((a, s) => a + s.positivity * (s.words || 0), 0) / totW
+        )
+      : Math.round(
+          perSpeaker.reduce((a, s) => a + s.positivity, 0) / perSpeaker.length
+        );
+  const overallMood =
+    overallPositivity >= 60
+      ? "positif"
+      : overallPositivity <= 40
+      ? "négatif"
+      : "neutre";
 
   return {
     multi: seg.multi,
@@ -471,8 +490,8 @@ export function analyzeSpeakers(text) {
     lang,
     overall: {
       idea: topKeywords(text, lang, names),
-      mood: overallSenti.label,
-      positivity: overallSenti.positivity,
+      mood: overallMood,
+      positivity: overallPositivity,
     },
     speakers: perSpeaker,
   };
