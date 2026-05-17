@@ -13,6 +13,7 @@ const basisKey = {
   labels: "sp.basisLabels",
   tags: "sp.basisTags",
   dash: "sp.basisDash",
+  reviews: "sp.basisReviews",
   none: "sp.basisNone",
 };
 
