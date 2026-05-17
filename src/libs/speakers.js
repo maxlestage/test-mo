@@ -209,8 +209,102 @@ function representative(senti) {
   return null;
 }
 
+// --- Corpus d'avis / forum (un auteur par avis) ---------------------
+
+const RE_REVIEW_META =
+  /^(?:détail|lire la suite|déposer un avis|trier par.*|visit[ée] en .*|avis déposé le.*|©.*|via google|note|\d+\s+avis|\d(?:[.,]\d)?\s*\/\s*5|partager|signaler|réponse de.*)$/i;
+
+const RE_AVIS = /^\s*avis déposé le/gim;
+const RE_VISITE = /^\s*visit[ée]\s+en\s+/gim;
+
+function isHandle(s) {
+  const v = s.trim();
+  if (v.length < 2 || v.length > 40) return false;
+  if (RE_REVIEW_META.test(v)) return false;
+  if (/[!?,;:«»"]/.test(v)) return false;
+  if (/[.][\s]/.test(v)) return false; // phrase (point + espace)
+  if ((v.match(/\s/g) || []).length > 3) return false;
+  return /^[\p{L}\p{N}][\p{L}\p{N} ._'-]*$/u.test(v);
+}
+
+function looksLikeReviews(text) {
+  const avis = (text.match(RE_AVIS) || []).length;
+  const visite = (text.match(RE_VISITE) || []).length;
+  const lines = text.split(/\r?\n/).map((l) => l.trim());
+  let dup = 0;
+  for (let i = 0; i + 1 < lines.length; i++) {
+    if (lines[i] && lines[i] === lines[i + 1] && isHandle(lines[i])) dup++;
+  }
+  return avis >= 3 || dup >= 3 || (avis >= 2 && visite >= 2);
+}
+
+// 1 auteur = 1 avis. Le pseudo apparaît en double avant « Visité en… ».
+function fromReviews(text) {
+  const lines = text.split(/\r?\n/).map((l) => l.trim());
+  const marks = [];
+  for (let i = 0; i + 1 < lines.length; i++) {
+    if (lines[i] && lines[i] === lines[i + 1] && isHandle(lines[i])) {
+      marks.push({ name: lines[i], start: i + 2 });
+    }
+  }
+  // Repli : si pas de pseudo dédoublé, découper sur « Avis déposé le ».
+  if (marks.length < 2) {
+    const reviews = text.split(/^\s*avis déposé le.*$/gim);
+    const byName = new Map();
+    let n = 0;
+    for (const block of reviews) {
+      const body = block
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l && !RE_REVIEW_META.test(l));
+      if (body.length < 1) continue;
+      const name = isHandle(body[0]) ? body[0] : `Avis ${++n}`;
+      const content = body.slice(isHandle(body[0]) ? 1 : 0).join("\n");
+      if (!content.trim()) continue;
+      const e = byName.get(name) || { name, text: "", turns: 0 };
+      e.text += (e.text ? "\n" : "") + content;
+      e.turns += 1;
+      byName.set(name, e);
+    }
+    return [...byName.values()];
+  }
+
+  const byName = new Map();
+  marks.forEach((mk, idx) => {
+    const end = idx + 1 < marks.length ? marks[idx + 1].start - 2 : lines.length;
+    const body = [];
+    for (let i = mk.start; i < end; i++) {
+      const l = lines[i];
+      if (!l) continue;
+      if (l === mk.name) continue;
+      if (RE_REVIEW_META.test(l)) continue;
+      body.push(l);
+    }
+    const content = body.join("\n").trim();
+    if (!content) return;
+    const e = byName.get(mk.name) || { name: mk.name, text: "", turns: 0 };
+    e.text += (e.text ? "\n" : "") + content;
+    e.turns += 1;
+    byName.set(mk.name, e);
+  });
+  return [...byName.values()];
+}
+
 // Construit la segmentation et le verdict « une / plusieurs personnes ».
 export function segmentSpeakers(text) {
+  if (looksLikeReviews(text)) {
+    const reviewers = fromReviews(text);
+    if (reviewers.length >= 2) {
+      return {
+        multi: true,
+        basis: "reviews",
+        speakers: reviewers,
+        turnCount: reviewers.reduce((a, s) => a + s.turns, 0),
+        named: true,
+      };
+    }
+  }
+
   const labelled = fromLabels(text);
   if (labelled.speakers.length >= 2) {
     return {
