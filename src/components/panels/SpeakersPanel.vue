@@ -8,11 +8,34 @@ const { t } = useI18n();
 const moodClass = (m) =>
   m === "positif" ? "level-easy" : m === "négatif" ? "level-hard" : "level-ok";
 const moodLabel = (m) => t("mood." + m);
+
+const basisKey = {
+  labels: "sp.basisLabels",
+  tags: "sp.basisTags",
+  dash: "sp.basisDash",
+  none: "sp.basisNone",
+};
+
+function displayName(name) {
+  if (name === "Auteur") return t("sp.author");
+  if (name === "?") return t("sp.unknown");
+  const m = name.match(/^Locuteur (\d+)$/);
+  if (m) return `${t("sp.voice")} ${m[1]}`;
+  return name;
+}
 </script>
 
 <template>
   <div class="spk">
     <p class="intro">{{ t("sp.intro") }}</p>
+
+    <div class="verdict" :class="speakers.multi ? 'is-multi' : 'is-single'">
+      <span class="vbadge">{{ speakers.multi ? "👥" : "👤" }}</span>
+      <div>
+        <strong>{{ speakers.multi ? t("sp.multiYes") : t("sp.multiNo") }}</strong>
+        <span class="vbasis">{{ t(basisKey[speakers.basis] || "sp.basisNone") }}</span>
+      </div>
+    </div>
 
     <div class="overview">
       <div class="ov-head">
@@ -42,14 +65,10 @@ const moodLabel = (m) => t("mood." + m);
       </p>
     </div>
 
-    <p v-if="!speakers.multi" class="note">{{ t("sp.note") }}</p>
-
     <div class="grid">
       <div v-for="s in speakers.speakers" :key="s.name" class="card">
         <div class="card-top">
-          <span class="name">
-            {{ s.name === "Auteur" ? t("sp.author") : s.name }}
-          </span>
+          <span class="name">{{ displayName(s.name) }}</span>
           <span class="badge" :class="moodClass(s.mood)">
             {{ moodLabel(s.mood) }}
           </span>
@@ -81,6 +100,31 @@ const moodLabel = (m) => t("mood." + m);
 </template>
 
 <style scoped>
+.verdict {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.verdict.is-multi {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.verdict .vbadge {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.verdict strong {
+  display: block;
+  font-size: 1rem;
+}
+.verdict .vbasis {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
 .spk {
   display: flex;
   flex-direction: column;
