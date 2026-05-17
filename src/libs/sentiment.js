@@ -13,10 +13,17 @@ remarquable admirable sublime délicieux apprécier apprécié apprécie utile
 efficace clair confiance espoir espérer rêve sourire rire fier fière calme
 paisible sécurité liberté amour tendresse gentil gentille sympathique solide
 fascinant captivant inspirant prometteur exceptionnel idéal bravo gagner gagné
-victoire chance facile agréablement séduisant`;
+victoire chance facile agréablement séduisant
+fabuleux fabuleuse incontournable intéressant intéressante intéressants
+intéressantes sympa enrichissant ludique ludiques passionnant passionnante
+recommande recommander recommandé conseille conseiller top cool plaisant
+divertissant instructif instructive éducatif éducative original originale
+ravissant impressionnant impressionnante adoré adorent chouette extra
+parfaitement génialissime qualité réussie superbes`;
 
 const POS_FR_STRONG = `magnifique génial extraordinaire merveilleux adore adorer
-fantastique sublime parfait exceptionnel formidable bravo victoire`;
+fantastique sublime parfait exceptionnel formidable bravo victoire fabuleux
+incontournable passionnant`;
 
 const NEG_FR = `mauvais mauvaise mal pire pis horrible affreux affreuse terrible
 nul nulle détester déteste détesté haine haïr triste tristesse pleurer peur
@@ -25,10 +32,16 @@ désastre pénible ennuyeux ennui laid moche douleur souffrir souffrance pire
 problème difficile dur inquiet inquiète angoisse désespoir méchant cruel injuste
 pauvre lamentable médiocre nul agaçant énervant fatigué seul solitude sombre
 cassé brisé perdre perdu perte erreur faute danger menace honte coupable
-amer dégoût horreur stress tension conflit guerre violence mensonge trahir`;
+amer dégoût horreur stress tension conflit guerre violence mensonge trahir
+dégradation dégradé dégradée archaïque insupportable exorbitant exorbitants
+exorbitante dommage déplorable bof ennuyeux surchargé surchargée surchargées
+raté ratée catastrophique regret regrette regretté abusé abusif honteux
+scandaleux cher chère biaisé biaisée faux fausse insuffisant insuffisante
+décevant nul vétuste sale bruyant`;
 
 const NEG_FR_STRONG = `horrible affreux terrible catastrophe désastre désespoir
-déteste détester haine atroce horreur abominable`;
+déteste détester haine atroce horreur abominable insupportable déplorable
+catastrophique scandaleux`;
 
 const POS_EN = `good great excellent wonderful amazing fantastic awesome perfect
 happy joy love loving lovely beautiful brilliant best better success successful
@@ -153,6 +166,16 @@ export function analyzeSentiment(text) {
 
   const meanPerSentence = sentences.length ? total / sentences.length : 0;
   const overall = totalHits ? total / totalHits : 0;
+  // Le label reflète la polarité moyenne des mots émotionnels
+  // (et non une moyenne diluée par le nombre de phrases).
+  const label =
+    totalHits === 0
+      ? "neutre"
+      : overall > 0.3
+      ? "positif"
+      : overall < -0.3
+      ? "négatif"
+      : "neutre";
   const words = [...wordTotals.values()];
 
   const ranked = (sign) =>
@@ -167,7 +190,7 @@ export function analyzeSentiment(text) {
     counts,
     meanPerSentence,
     overall,
-    label: labelFor(meanPerSentence),
+    label,
     // 0 = très négatif, 100 = très positif
     positivity: Math.round(((Math.max(-2, Math.min(2, overall)) + 2) / 4) * 100),
     topPositive: words

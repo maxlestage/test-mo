@@ -166,6 +166,7 @@ const messages = {
     "sp.basisDash":
       "dialogue à tirets — locuteurs non nommés (alternance supposée)",
     "sp.basisNone": "aucun marqueur de dialogue trouvé",
+    "sp.basisReviews": "corpus d'avis — un auteur par avis",
 
     "ng.title": "N-grammes",
     "ng.colloc": "Collocations (par PMI)",
@@ -355,6 +356,7 @@ const messages = {
     "sp.basisTags": "detected from dialogue tags (\"…, said X\")",
     "sp.basisDash": "dash dialogue — speakers unnamed (alternation assumed)",
     "sp.basisNone": "no dialogue cue found",
+    "sp.basisReviews": "reviews corpus — one author per review",
 
     "ng.title": "N-grams",
     "ng.colloc": "Collocations (by PMI)",
@@ -544,6 +546,7 @@ const messages = {
     "sp.basisDash":
       "diálogo con guiones — sin nombres (alternancia supuesta)",
     "sp.basisNone": "sin señales de diálogo",
+    "sp.basisReviews": "corpus de reseñas — un autor por reseña",
 
     "ng.title": "N-gramas",
     "ng.colloc": "Colocaciones (por PMI)",
