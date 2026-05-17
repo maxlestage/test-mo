@@ -395,6 +395,7 @@ export function analyzeSpeakers(text) {
       name: s.name === "—" ? "Auteur" : s.name,
       turns: s.turns,
       words: tokenizeWords(body).length,
+      text: body,
       mood: senti.label,
       positivity: senti.positivity,
       meanScore: senti.meanPerSentence,
