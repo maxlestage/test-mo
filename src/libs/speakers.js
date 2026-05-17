@@ -211,8 +211,26 @@ function representative(senti) {
 
 // --- Corpus d'avis / forum (un auteur par avis) ---------------------
 
-const RE_REVIEW_META =
-  /^(?:détail|lire la suite|déposer un avis|trier par.*|visit[ée] en .*|avis déposé le.*|©.*|via google|note|\d+\s+avis|\d(?:[.,]\d)?\s*\/\s*5|partager|signaler|réponse de.*)$/i;
+const RE_META_BASE =
+  /^(?:détail|lire la suite|déposer un avis|trier par.*|visit[ée] en .*|avis déposé le.*|©.*|via google|note|avis r[ée]cents?|partager|signaler|r[ée]pondre|utile|reply|share|report|helpful|réponse de.*|cet avis n.?est pas g[ée]r[ée]|this review is not managed|\d+\s+avis)$/i;
+const RE_RATING_LINE =
+  /^\s*(?:(?:not[ée]|rated).*(?:étoiles?|stars?|\/\s*5|sur\s+5|out of\s+5)|\d(?:[.,]\d)?\s*(?:\/\s*5|sur\s+5|out of\s+5)(?:\s*(?:étoiles?|stars?))?)\s*$/i;
+const RE_URL =
+  /^(?:https?:\/\/\S+|www\.\S+|[a-z0-9-]+(?:\.[a-z0-9-]+){1,3}(?:\/\S*)?)$/i;
+
+function isMeta(l) {
+  return RE_META_BASE.test(l) || RE_RATING_LINE.test(l) || RE_URL.test(l);
+}
+
+// Extrait une note 1–5 d'une chaîne (« Noté 1 sur 5 étoiles », « 4/5 »…).
+function extractRating(s) {
+  let m =
+    s.match(/(?:not[ée]|rated)\s+(\d(?:[.,]\d)?)\s*(?:\/\s*5|sur\s+5|out of\s+5|étoiles?|stars?)/i) ||
+    s.match(/\b(\d(?:[.,]\d)?)\s*(?:\/\s*5|sur\s+5|out of\s+5)\b/i);
+  if (!m) return null;
+  const v = parseFloat(m[1].replace(",", "."));
+  return v >= 0 && v <= 5 ? v : null;
+}
 
 const RE_AVIS = /^\s*avis déposé le/gim;
 const RE_VISITE = /^\s*visit[ée]\s+en\s+/gim;
@@ -220,7 +238,7 @@ const RE_VISITE = /^\s*visit[ée]\s+en\s+/gim;
 function isHandle(s) {
   const v = s.trim();
   if (v.length < 2 || v.length > 40) return false;
-  if (RE_REVIEW_META.test(v)) return false;
+  if (isMeta(v)) return false;
   if (/[!?,;:«»"]/.test(v)) return false;
   if (/[.][\s]/.test(v)) return false; // phrase (point + espace)
   if ((v.match(/\s/g) || []).length > 3) return false;
@@ -232,10 +250,20 @@ function looksLikeReviews(text) {
   const visite = (text.match(RE_VISITE) || []).length;
   const lines = text.split(/\r?\n/).map((l) => l.trim());
   let dup = 0;
-  for (let i = 0; i + 1 < lines.length; i++) {
+  let ratings = 0;
+  let urls = 0;
+  for (let i = 0; i < lines.length; i++) {
     if (lines[i] && lines[i] === lines[i + 1] && isHandle(lines[i])) dup++;
+    if (lines[i] && RE_RATING_LINE.test(lines[i])) ratings++;
+    if (lines[i] && RE_URL.test(lines[i])) urls++;
   }
-  return avis >= 3 || dup >= 3 || (avis >= 2 && visite >= 2);
+  return (
+    avis >= 3 ||
+    dup >= 3 ||
+    ratings >= 2 ||
+    (avis >= 2 && visite >= 2) ||
+    (dup >= 2 && (ratings >= 1 || urls >= 1 || avis >= 1 || visite >= 1))
+  );
 }
 
 // 1 auteur = 1 avis. Le pseudo apparaît en double avant « Visité en… ».
@@ -253,17 +281,19 @@ function fromReviews(text) {
     const byName = new Map();
     let n = 0;
     for (const block of reviews) {
+      const rating = extractRating(block);
       const body = block
         .split(/\r?\n/)
         .map((l) => l.trim())
-        .filter((l) => l && !RE_REVIEW_META.test(l));
+        .filter((l) => l && !isMeta(l));
       if (body.length < 1) continue;
       const name = isHandle(body[0]) ? body[0] : `Avis ${++n}`;
       const content = body.slice(isHandle(body[0]) ? 1 : 0).join("\n");
       if (!content.trim()) continue;
-      const e = byName.get(name) || { name, text: "", turns: 0 };
+      const e = byName.get(name) || { name, text: "", turns: 0, rating: null };
       e.text += (e.text ? "\n" : "") + content;
       e.turns += 1;
+      if (e.rating == null && rating != null) e.rating = rating;
       byName.set(name, e);
     }
     return [...byName.values()];
@@ -272,19 +302,35 @@ function fromReviews(text) {
   const byName = new Map();
   marks.forEach((mk, idx) => {
     const end = idx + 1 < marks.length ? marks[idx + 1].start - 2 : lines.length;
+    let rating = null;
     const body = [];
     for (let i = mk.start; i < end; i++) {
       const l = lines[i];
       if (!l) continue;
       if (l === mk.name) continue;
-      if (RE_REVIEW_META.test(l)) continue;
+      if (rating == null) {
+        const r = RE_RATING_LINE.test(l) ? extractRating(l) : null;
+        if (r != null) rating = r;
+      }
+      if (isMeta(l)) continue;
+      // Bloc marque + URL (ex. « Darty » suivi de « www.darty.com »).
+      let next = "";
+      for (let j = i + 1; j < end; j++) {
+        if (lines[j]) {
+          next = lines[j];
+          break;
+        }
+      }
+      if (RE_URL.test(next)) continue;
       body.push(l);
     }
     const content = body.join("\n").trim();
     if (!content) return;
-    const e = byName.get(mk.name) || { name: mk.name, text: "", turns: 0 };
+    const e =
+      byName.get(mk.name) || { name: mk.name, text: "", turns: 0, rating: null };
     e.text += (e.text ? "\n" : "") + content;
     e.turns += 1;
+    if (e.rating == null && rating != null) e.rating = rating;
     byName.set(mk.name, e);
   });
   return [...byName.values()];
@@ -391,13 +437,23 @@ export function analyzeSpeakers(text) {
   const perSpeaker = seg.speakers.map((s) => {
     const body = s.text || "";
     const senti = analyzeSentiment(body);
+    let positivity = senti.positivity;
+    let mood = senti.label;
+    // Une note /5 est le sentiment réel donné par l'auteur :
+    // elle prime, le lexique l'affine.
+    if (s.rating != null) {
+      const ratingPos = Math.round(((s.rating - 1) / 4) * 100);
+      positivity = Math.round(0.7 * ratingPos + 0.3 * senti.positivity);
+      mood = positivity >= 60 ? "positif" : positivity <= 40 ? "négatif" : "neutre";
+    }
     return {
       name: s.name === "—" ? "Auteur" : s.name,
       turns: s.turns,
       words: tokenizeWords(body).length,
       text: body,
-      mood: senti.label,
-      positivity: senti.positivity,
+      rating: s.rating ?? null,
+      mood,
+      positivity,
       meanScore: senti.meanPerSentence,
       keywords: topKeywords(body, lang, names),
       highlight: representative(senti),
