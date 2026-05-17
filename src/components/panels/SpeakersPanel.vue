@@ -76,6 +76,7 @@ function displayName(name) {
         </div>
         <div class="meta">
           {{ s.turns }} {{ t("sp.intervN") }} · {{ s.words }} {{ t("sp.wordsN") }}
+          <span v-if="s.rating != null" class="stars">· ★ {{ s.rating }}/5</span>
         </div>
         <div class="bar">
           <div class="bar-fill" :style="{ width: s.positivity + '%' }" />
@@ -259,6 +260,10 @@ blockquote.level-hard {
 }
 blockquote.level-ok {
   border-left-color: var(--warn);
+}
+.stars {
+  color: var(--accent);
+  font-weight: 600;
 }
 .full {
   margin-top: 0.85rem;
