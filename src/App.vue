@@ -59,7 +59,9 @@ const { toggle: toggleNav } = useNav();
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
 }
 .app-header {
   display: flex;
