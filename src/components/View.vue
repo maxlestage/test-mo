@@ -13,6 +13,8 @@ import NgramPanel from "./panels/NgramPanel.vue";
 import ConcordancePanel from "./panels/ConcordancePanel.vue";
 import SentimentPanel from "./panels/SentimentPanel.vue";
 import SpeakersPanel from "./panels/SpeakersPanel.vue";
+import SourceTextPanel from "./panels/SourceTextPanel.vue";
+import CorpusPanel from "./panels/CorpusPanel.vue";
 import ReportView from "./ReportView.vue";
 
 const { document, hasContent } = useAnalysis();
@@ -33,6 +35,7 @@ function analyzeDraft() {
 }
 
 const tabs = [
+  { id: "source", key: "tabs.source", comp: SourceTextPanel },
   { id: "overview", key: "tabs.overview", comp: OverviewPanel },
   { id: "frequency", key: "tabs.frequency", comp: FrequencyPanel },
   { id: "diversity", key: "tabs.diversity", comp: DiversityPanel },
@@ -41,6 +44,7 @@ const tabs = [
   { id: "speakers", key: "tabs.speakers", comp: SpeakersPanel },
   { id: "ngram", key: "tabs.ngram", comp: NgramPanel },
   { id: "kwic", key: "tabs.kwic", comp: ConcordancePanel },
+  { id: "corpus", key: "tabs.corpus", comp: CorpusPanel },
 ];
 const active = ref("overview");
 
