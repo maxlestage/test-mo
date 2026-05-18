@@ -166,21 +166,27 @@ export function analyzeSentiment(text) {
 
   const meanPerSentence = sentences.length ? total / sentences.length : 0;
   const overall = totalHits ? total / totalHits : 0;
-  // Le label reflète la part nette de phrases orientées sur le total :
-  // il faut une vraie majorité orientée (≥ 25 %) pour sortir du neutre.
-  // Sinon (la plupart des phrases neutres) le global reste « neutre ».
+  const opinion = counts.positif + counts["négatif"];
   const netShare = sentences.length
     ? (counts.positif - counts["négatif"]) / sentences.length
     : 0;
-  const label =
-    totalHits === 0 || netShare === 0
-      ? "neutre"
-      : netShare >= 0.25
-      ? "positif"
-      : netShare <= -0.25
-      ? "négatif"
-      : "neutre";
+  // Si la majorité des phrases est neutre, le texte est globalement
+  // neutre — sauf polarisation forte (|netShare| ≥ 0,5). Sinon il
+  // faut une vraie majorité orientée (≥ 25 %) pour sortir du neutre.
+  const neutralMajority = counts.neutre > opinion;
+  let label;
+  if (totalHits === 0 || opinion === 0) label = "neutre";
+  else if (neutralMajority && Math.abs(netShare) < 0.5) label = "neutre";
+  else if (netShare >= 0.25) label = "positif";
+  else if (netShare <= -0.25) label = "négatif";
+  else label = "neutre";
   const words = [...wordTotals.values()];
+
+  // L'indice est atténué vers 50 quand peu de phrases portent une
+  // opinion : un texte presque neutre ne peut pas afficher 88/100.
+  const opinionShare = sentences.length ? opinion / sentences.length : 0;
+  const rawPositivity = ((Math.max(-2, Math.min(2, overall)) + 2) / 4) * 100;
+  const positivity = Math.round(50 + (rawPositivity - 50) * opinionShare);
 
   // Extraits « les plus positifs/négatifs » : seules les phrases
   // nettement orientées (|score| ≥ 1.5). Une phrase longue contenant
@@ -199,7 +205,7 @@ export function analyzeSentiment(text) {
     overall,
     label,
     // 0 = très négatif, 100 = très positif
-    positivity: Math.round(((Math.max(-2, Math.min(2, overall)) + 2) / 4) * 100),
+    positivity,
     topPositive: words
       .filter((w) => w.total > 0)
       .sort((a, b) => b.total - a.total)
