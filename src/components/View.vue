@@ -59,26 +59,30 @@ watch(
 
     <main class="content">
       <template v-if="document && hasContent">
-        <div class="doc-title">
-          <h2>{{ document.name }}</h2>
-          <button class="btn export-btn" @click="exportPdf">
-            {{ t("view.export") }}
-          </button>
+        <div class="topbar">
+          <div class="doc-title">
+            <h2>{{ document.name }}</h2>
+            <button class="btn export-btn" @click="exportPdf">
+              {{ t("view.export") }}
+            </button>
+          </div>
+          <nav class="tabs">
+            <button
+              v-for="tab in tabs"
+              :key="tab.id"
+              :class="{ on: active === tab.id }"
+              @click="active = tab.id"
+            >
+              {{ t(tab.key) }}
+            </button>
+          </nav>
         </div>
-        <nav class="tabs">
-          <button
-            v-for="tab in tabs"
-            :key="tab.id"
-            :class="{ on: active === tab.id }"
-            @click="active = tab.id"
-          >
-            {{ t(tab.key) }}
-          </button>
-        </nav>
-        <section class="panel">
-          <component :is="tabs.find((x) => x.id === active).comp" />
-        </section>
-        <ReportView />
+        <div class="panel-wrap">
+          <section class="panel">
+            <component :is="tabs.find((x) => x.id === active).comp" />
+          </section>
+          <ReportView />
+        </div>
       </template>
 
       <div v-else class="empty">
@@ -136,8 +140,17 @@ watch(
 .content {
   flex: 1;
   min-width: 0;
-  padding: 1.5rem 2rem;
   overflow-y: auto;
+}
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding: 1.5rem 2rem 0;
+}
+.panel-wrap {
+  padding: 1.25rem 2rem 2rem;
 }
 .doc-title {
   display: flex;
@@ -162,7 +175,6 @@ watch(
   display: flex;
   gap: 0.3rem;
   border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem;
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -188,7 +200,8 @@ watch(
 .empty {
   display: grid;
   place-items: center;
-  height: 100%;
+  min-height: 100%;
+  padding: 2rem;
 }
 .empty-card {
   max-width: 640px;
@@ -247,7 +260,13 @@ watch(
   .backdrop {
     display: block;
   }
-  .content {
+  .topbar {
+    padding: 1rem 1rem 0;
+  }
+  .panel-wrap {
+    padding: 1rem 1rem 2rem;
+  }
+  .empty {
     padding: 1.25rem 1rem 2rem;
   }
 }
