@@ -35,6 +35,8 @@ const messages = {
     "tabs.speakers": "Locuteurs",
     "tabs.ngram": "N-grammes",
     "tabs.kwic": "Concordance",
+    "tabs.source": "Texte",
+    "tabs.corpus": "Corpus",
 
     "view.export": "⤓ Exporter en PDF",
     "view.welcome": "Bienvenue dans Mo-Grid",
@@ -122,6 +124,8 @@ const messages = {
     "rd.hFre": "Indice de facilité de lecture. 0 = très difficile, 100 = très facile.",
     "rd.hFk": "Niveau de scolarité (US) requis pour comprendre le texte.",
     "rd.hLix": "Mots/phrase + 100 × mots longs/mots. < 30 facile, > 60 difficile.",
+    "rd.intro":
+      "Les indices de lisibilité estiment l'effort de lecture. Échelle de type Flesch : 0 = très difficile, 100 = très facile. Flesch–Kincaid donne un niveau scolaire. LIX : < 30 facile, > 60 difficile.",
 
     "st.intro":
       "Détection lexicale du ressenti exprimé (lexique FR/EN, négation et adverbes d'intensité). Analyse 100 % locale.",
@@ -187,6 +191,31 @@ const messages = {
     "kw.prompt":
       "Saisissez un mot pour afficher ses occurrences en contexte (KWIC).",
 
+    "src.intro":
+      "Texte source du document, tel qu'analysé (lecture seule).",
+    "src.copy": "Copier",
+    "src.copied": "Copié ✓",
+    "src.chars": "caractères",
+    "src.words": "mots",
+
+    "cp.intro":
+      "Vue d'ensemble de tous les documents du corpus : statistiques agrégées et comparaison.",
+    "cp.docs": "Documents",
+    "cp.totalWords": "Mots au total",
+    "cp.avgWords": "Mots / document (moy.)",
+    "cp.one": "Ajoutez plusieurs documents pour comparer le corpus.",
+    "cp.doc": "Document",
+    "cp.words": "Mots",
+    "cp.sentences": "Phrases",
+    "cp.wps": "Mots/phrase",
+    "cp.ttr": "TTR",
+    "cp.read": "Lisibilité",
+    "cp.senti": "Sentiment",
+    "cp.min": "Min",
+    "cp.max": "Max",
+    "cp.avg": "Moyenne",
+    "cp.median": "Médiane",
+
     "rp.title": "Mo-Grid — Rapport d'analyse linguistique",
     "rp.document": "Document",
     "rp.edited": "Édité le",
@@ -227,6 +256,8 @@ const messages = {
     "tabs.speakers": "Speakers",
     "tabs.ngram": "N-grams",
     "tabs.kwic": "Concordance",
+    "tabs.source": "Text",
+    "tabs.corpus": "Corpus",
 
     "view.export": "⤓ Export to PDF",
     "view.welcome": "Welcome to Mo-Grid",
@@ -314,6 +345,8 @@ const messages = {
     "rd.hFre": "Reading ease index. 0 = very hard, 100 = very easy.",
     "rd.hFk": "US school grade required to understand the text.",
     "rd.hLix": "Words/sentence + 100 × long words/words. < 30 easy, > 60 hard.",
+    "rd.intro":
+      "Readability indices estimate reading effort. Flesch-type scale: 0 = very hard, 100 = very easy. Flesch–Kincaid gives a US school grade. LIX: < 30 easy, > 60 hard.",
 
     "st.intro":
       "Lexical detection of expressed sentiment (FR/EN lexicon, negation and intensifiers). 100% local analysis.",
@@ -377,6 +410,30 @@ const messages = {
     "kw.none": "No occurrence found.",
     "kw.prompt": "Enter a word to see it in context (KWIC).",
 
+    "src.intro": "Source text of the document, as analyzed (read-only).",
+    "src.copy": "Copy",
+    "src.copied": "Copied ✓",
+    "src.chars": "characters",
+    "src.words": "words",
+
+    "cp.intro":
+      "Overview of every document in the corpus: aggregated statistics and comparison.",
+    "cp.docs": "Documents",
+    "cp.totalWords": "Total words",
+    "cp.avgWords": "Words / document (avg)",
+    "cp.one": "Add several documents to compare the corpus.",
+    "cp.doc": "Document",
+    "cp.words": "Words",
+    "cp.sentences": "Sentences",
+    "cp.wps": "Words/sent.",
+    "cp.ttr": "TTR",
+    "cp.read": "Readability",
+    "cp.senti": "Sentiment",
+    "cp.min": "Min",
+    "cp.max": "Max",
+    "cp.avg": "Average",
+    "cp.median": "Median",
+
     "rp.title": "Mo-Grid — Linguistic analysis report",
     "rp.document": "Document",
     "rp.edited": "Generated on",
@@ -417,6 +474,8 @@ const messages = {
     "tabs.speakers": "Interlocutores",
     "tabs.ngram": "N-gramas",
     "tabs.kwic": "Concordancia",
+    "tabs.source": "Texto",
+    "tabs.corpus": "Corpus",
 
     "view.export": "⤓ Exportar a PDF",
     "view.welcome": "Bienvenido a Mo-Grid",
@@ -504,6 +563,8 @@ const messages = {
     "rd.hFre": "Índice de facilidad de lectura. 0 = muy difícil, 100 = muy fácil.",
     "rd.hFk": "Nivel escolar (EE. UU.) requerido para entender el texto.",
     "rd.hLix": "Palabras/frase + 100 × palabras largas/palabras. < 30 fácil, > 60 difícil.",
+    "rd.intro":
+      "Los índices de legibilidad estiman el esfuerzo de lectura. Escala tipo Flesch: 0 = muy difícil, 100 = muy fácil. Flesch–Kincaid da un nivel escolar. LIX: < 30 fácil, > 60 difícil.",
 
     "st.intro":
       "Detección léxica del sentimiento expresado (léxico FR/EN, negación e intensificadores). Análisis 100 % local.",
@@ -567,6 +628,30 @@ const messages = {
     "kw.occ": "ocurrencia(s)",
     "kw.none": "No se encontró ninguna ocurrencia.",
     "kw.prompt": "Escriba una palabra para verla en contexto (KWIC).",
+
+    "src.intro": "Texto fuente del documento, tal como se analiza (solo lectura).",
+    "src.copy": "Copiar",
+    "src.copied": "Copiado ✓",
+    "src.chars": "caracteres",
+    "src.words": "palabras",
+
+    "cp.intro":
+      "Visión general de todos los documentos del corpus: estadísticas agregadas y comparación.",
+    "cp.docs": "Documentos",
+    "cp.totalWords": "Palabras en total",
+    "cp.avgWords": "Palabras / documento (prom.)",
+    "cp.one": "Añada varios documentos para comparar el corpus.",
+    "cp.doc": "Documento",
+    "cp.words": "Palabras",
+    "cp.sentences": "Frases",
+    "cp.wps": "Palabras/frase",
+    "cp.ttr": "TTR",
+    "cp.read": "Legibilidad",
+    "cp.senti": "Sentimiento",
+    "cp.min": "Mín",
+    "cp.max": "Máx",
+    "cp.avg": "Promedio",
+    "cp.median": "Mediana",
 
     "rp.title": "Mo-Grid — Informe de análisis lingüístico",
     "rp.document": "Documento",
