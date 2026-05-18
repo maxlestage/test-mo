@@ -167,16 +167,17 @@ export function analyzeSentiment(text) {
   const meanPerSentence = sentences.length ? total / sentences.length : 0;
   const overall = totalHits ? total / totalHits : 0;
   // Le label reflète la part nette de phrases orientées sur le total :
-  // si la majorité des phrases est neutre, le global reste neutre.
+  // il faut une vraie majorité orientée (≥ 25 %) pour sortir du neutre.
+  // Sinon (la plupart des phrases neutres) le global reste « neutre ».
   const netShare = sentences.length
     ? (counts.positif - counts["négatif"]) / sentences.length
     : 0;
   const label =
     totalHits === 0 || netShare === 0
       ? "neutre"
-      : netShare >= 0.15
+      : netShare >= 0.25
       ? "positif"
-      : netShare <= -0.15
+      : netShare <= -0.25
       ? "négatif"
       : "neutre";
   const words = [...wordTotals.values()];
