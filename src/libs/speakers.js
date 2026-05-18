@@ -85,13 +85,36 @@ function isName(raw) {
   return /^\p{Lu}/u.test(n);
 }
 
+const RE_CODEY_LABEL =
+  /^(line|photo|page|fig|figure|table|colonne|column|row|ligne|étape|step|note|ref|id|version|build|error|warn|warning|exception|select|insert|update|delete|where|from|join|http|https|null|true|false|function|class|def|const|var|let|import|export|return|public|private|static|void|int|string|bool|stack|trace|caused|at)\b/i;
+
 function looksLikeName(label) {
   const l = label.trim();
   if (!l || l.length > 40) return false;
   if (l.split(/\s+/).length > 5) return false;
   if (/[.!?]$/.test(l)) return false;
   if (isHeading(l)) return false;
+  // Artefacts de code/log : « LINE 10 », « Photo 1 », « ERROR 500 »…
+  if (/^[\p{L}]+\s*\d+$/u.test(l)) return false;
+  if (/^\p{Lu}{2,}\s*\d/u.test(l)) return false;
+  if (RE_CODEY_LABEL.test(stripDiacritics(l))) return false;
   return /[\p{L}\p{N}]/u.test(l);
+}
+
+// Contenu technique (code, console, SQL, logs) : à ne pas analyser
+// comme une conversation.
+const RE_CODE_LINE =
+  /[{};]|=>|::|==|!=|&&|\|\||<\/|\/>|`|\$\{|#\{|\b(SELECT|INSERT|UPDATE|DELETE|WHERE|FROM|JOIN|function|const|let|var|def|class|import|require|return|public|private|static|void|null|true|false|regclass|attrelid)\b|\b\w+\.\w+\(|\b\w+\([^)]*\)|:\d+:\d+|\.(rb|js|ts|jsx|tsx|py|sql|ya?ml|json|log|sh|php|java|go|rs):\d+/;
+
+function looksLikeCode(text) {
+  const lines = String(text)
+    .split(/\r?\n/)
+    .map((l) => l.trim())
+    .filter(Boolean);
+  if (lines.length < 4) return false;
+  let code = 0;
+  for (const l of lines) if (RE_CODE_LINE.test(l)) code++;
+  return code / lines.length >= 0.25;
 }
 
 // Stratégie 1 : étiquettes « Nom : … » en début de ligne.
@@ -372,6 +395,15 @@ function fromReviews(text) {
 
 // Construit la segmentation et le verdict « une / plusieurs personnes ».
 export function segmentSpeakers(text) {
+  if (looksLikeCode(text)) {
+    return {
+      multi: false,
+      basis: "none",
+      speakers: [{ name: "—", text: String(text), turns: 1 }],
+      turnCount: 1,
+      named: false,
+    };
+  }
   if (looksLikeReviews(text)) {
     const reviewers = fromReviews(text);
     if (reviewers.length >= 2) {
