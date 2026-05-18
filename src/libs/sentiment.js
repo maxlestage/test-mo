@@ -181,9 +181,12 @@ export function analyzeSentiment(text) {
       : "neutre";
   const words = [...wordTotals.values()];
 
+  // Extraits « les plus positifs/négatifs » : seules les phrases
+  // nettement orientées (|score| ≥ 1.5). Une phrase longue contenant
+  // un seul mot faible (−1) reste neutre et n'est pas mise en avant.
   const ranked = (sign) =>
     sentences
-      .filter((s) => (sign > 0 ? s.score > 0.5 : s.score < -0.5))
+      .filter((s) => (sign > 0 ? s.score >= 1.5 : s.score <= -1.5))
       .sort((a, b) => (sign > 0 ? b.score - a.score : a.score - b.score))
       .slice(0, 3);
 
