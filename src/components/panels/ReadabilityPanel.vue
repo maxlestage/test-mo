@@ -73,6 +73,7 @@ const scores = computed(() => {
 
 <template>
   <div class="read">
+    <p class="intro">{{ t("rd.intro") }}</p>
     <div class="stats">
       <span class="tag">{{ readability.words }} {{ t("rd.words") }}</span>
       <span class="tag">{{ readability.sentences }} {{ t("rd.sentences") }}</span>
@@ -97,6 +98,13 @@ const scores = computed(() => {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+.intro {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+  max-width: 78ch;
 }
 .stats {
   display: flex;
