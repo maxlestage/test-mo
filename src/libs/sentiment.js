@@ -65,7 +65,7 @@ const NEG_EN_STRONG = `terrible awful horrible worst hate disaster despair
 atrocious horror dreadful catastrophe`;
 
 const NEGATORS = new Set(
-  `ne n pas plus jamais rien aucun aucune sans ni non personne nul nulle
+  `ne n pas plus jamais rien aucun aucune sans ni non personne
    not no never none nobody nothing without cannot cant dont doesnt isnt arent
    wasnt werent neither nor hardly`.split(/\s+/).filter(Boolean)
 );
@@ -166,14 +166,17 @@ export function analyzeSentiment(text) {
 
   const meanPerSentence = sentences.length ? total / sentences.length : 0;
   const overall = totalHits ? total / totalHits : 0;
-  // Le label reflète la polarité moyenne des mots émotionnels
-  // (et non une moyenne diluée par le nombre de phrases).
+  // Le label reflète la part nette de phrases orientées sur le total :
+  // si la majorité des phrases est neutre, le global reste neutre.
+  const netShare = sentences.length
+    ? (counts.positif - counts["négatif"]) / sentences.length
+    : 0;
   const label =
-    totalHits === 0
+    totalHits === 0 || netShare === 0
       ? "neutre"
-      : overall > 0.3
+      : netShare >= 0.15
       ? "positif"
-      : overall < -0.3
+      : netShare <= -0.15
       ? "négatif"
       : "neutre";
   const words = [...wordTotals.values()];
