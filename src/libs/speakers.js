@@ -6,9 +6,36 @@
 // L'objectif principal : répondre de façon robuste à
 // « plusieurs personnes s'expriment-elles ? ».
 
-import { tokenizeWords, tokenizeSentences } from "./text.js";
+import { tokenizeWords, tokenizeSentences, stripDiacritics } from "./text.js";
 import { isStopword, detectLanguage } from "./stopwords.js";
 import { analyzeSentiment } from "./sentiment.js";
+
+// Titres de section / FAQ / marketing à ne PAS confondre avec un
+// locuteur quand une ligne ressemble à « Titre : … ».
+const HEADINGS = new Set(
+  `positionnement tarifs tarif tarification prix fonctionnalites fonctionnalite
+   avantages inconvenients description presentation resume conclusion
+   introduction objectif objectifs contexte note notes avis idee idees services
+   service produits produit contact adresse horaires telephone email courriel
+   site reponse question questions remarque remarques exemple exemples sommaire
+   plan mission vision valeurs equipe propos faq aide support garantie livraison
+   paiement retour retours securite confidentialite mentions conditions
+   abonnement offre offres pack formule formules detail details caracteristiques
+   specifications bref total avantage inconvenient
+   positioning pricing price prices features feature pros cons description
+   overview summary conclusion introduction objective context note notes review
+   reviews services products contact address hours phone email website answer
+   question questions remark example examples mission vision values team about
+   faq help support warranty shipping payment returns security privacy terms
+   subscription offer plan plans details specs benefits`
+    .split(/\s+/)
+    .filter(Boolean)
+);
+
+function isHeading(label) {
+  const k = stripDiacritics(label.trim().toLowerCase());
+  return HEADINGS.has(k) || k.split(/\s+/).every((w) => HEADINGS.has(w));
+}
 
 const TIMESTAMP_RE =
   /^\s*(?:\[?\d{1,2}[/.]\d{1,2}[/.]\d{2,4}[,]?\s*)?\[?\d{1,2}:\d{2}(?::\d{2})?\]?\s*(?:[AP]M)?\s*[-–—]?\s*/i;
@@ -63,6 +90,7 @@ function looksLikeName(label) {
   if (!l || l.length > 40) return false;
   if (l.split(/\s+/).length > 5) return false;
   if (/[.!?]$/.test(l)) return false;
+  if (isHeading(l)) return false;
   return /[\p{L}\p{N}]/u.test(l);
 }
 
@@ -71,7 +99,9 @@ function fromLabels(text) {
   const lines = String(text).split(/\r?\n/);
   const turns = [];
   let current = null;
+  let nonEmpty = 0;
   for (const raw of lines) {
+    if (raw.trim()) nonEmpty++;
     const line = raw.replace(TIMESTAMP_RE, "");
     const m = line.match(SPEAKER_RE);
     if (m && looksLikeName(m[1])) {
@@ -88,7 +118,11 @@ function fromLabels(text) {
     e.turns += 1;
     byName.set(tr.speaker, e);
   }
-  return { speakers: [...byName.values()], turns: turns.length };
+  return {
+    speakers: [...byName.values()],
+    turns: turns.length,
+    coverage: nonEmpty ? turns.length / nonEmpty : 0,
+  };
 }
 
 function findNameIn(segment) {
@@ -352,7 +386,15 @@ export function segmentSpeakers(text) {
   }
 
   const labelled = fromLabels(text);
-  if (labelled.speakers.length >= 2) {
+  // Vrai chat/transcription : la majorité des lignes sont des tours
+  // étiquetés, OU au moins deux étiquettes se répètent. Sinon ce sont
+  // probablement des titres de section (« Tarifs : … »), pas des
+  // locuteurs.
+  const recurring = labelled.speakers.filter((s) => s.turns >= 2).length;
+  if (
+    labelled.speakers.length >= 2 &&
+    (labelled.coverage >= 0.5 || recurring >= 2)
+  ) {
     return {
       multi: true,
       basis: "labels",
@@ -372,14 +414,18 @@ export function segmentSpeakers(text) {
     (dialogueTurns >= 1 && speechHits >= 2);
 
   if (!hasDialogue) {
+    // Une seule étiquette = un locuteur unique réel. Plusieurs
+    // étiquettes à faible couverture = titres de section : on traite
+    // le texte comme un auteur unique (pas de fausses cartes).
+    const single = labelled.speakers.length === 1;
     return {
       multi: false,
-      basis: labelled.speakers.length === 1 ? "labels" : "none",
-      speakers: labelled.speakers.length
+      basis: single ? "labels" : "none",
+      speakers: single
         ? labelled.speakers
         : [{ name: "—", text: String(text), turns: 1 }],
-      turnCount: labelled.turns || 1,
-      named: labelled.speakers.length === 1,
+      turnCount: single ? labelled.turns : 1,
+      named: single,
     };
   }
 
