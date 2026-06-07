@@ -15,6 +15,8 @@ import SentimentPanel from "./panels/SentimentPanel.vue";
 import SpeakersPanel from "./panels/SpeakersPanel.vue";
 import SourceTextPanel from "./panels/SourceTextPanel.vue";
 import CorpusPanel from "./panels/CorpusPanel.vue";
+import SpecificitiesPanel from "./panels/SpecificitiesPanel.vue";
+import ProgressionPanel from "./panels/ProgressionPanel.vue";
 import ReportView from "./ReportView.vue";
 
 const { document, hasContent } = useAnalysis();
@@ -38,12 +40,14 @@ const tabs = [
   { id: "source", key: "tabs.source", comp: SourceTextPanel },
   { id: "overview", key: "tabs.overview", comp: OverviewPanel },
   { id: "frequency", key: "tabs.frequency", comp: FrequencyPanel },
+  { id: "spec", key: "tabs.spec", comp: SpecificitiesPanel },
   { id: "diversity", key: "tabs.diversity", comp: DiversityPanel },
   { id: "readability", key: "tabs.readability", comp: ReadabilityPanel },
   { id: "sentiment", key: "tabs.sentiment", comp: SentimentPanel },
   { id: "speakers", key: "tabs.speakers", comp: SpeakersPanel },
   { id: "ngram", key: "tabs.ngram", comp: NgramPanel },
   { id: "kwic", key: "tabs.kwic", comp: ConcordancePanel },
+  { id: "prog", key: "tabs.prog", comp: ProgressionPanel },
   { id: "corpus", key: "tabs.corpus", comp: CorpusPanel },
 ];
 const active = ref("overview");
