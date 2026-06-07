@@ -47,22 +47,39 @@ const POS_EN = `good great excellent wonderful amazing fantastic awesome perfect
 happy joy love loving lovely beautiful brilliant best better success successful
 positive nice pleasant delightful glad pleased grateful enjoy enjoyed superb
 outstanding marvelous fabulous terrific gorgeous charming peaceful hope bright
-win winner won kind warm smart clever inspiring fun safe trust calm confident
+win winner kind warm smart clever inspiring fun safe trust calm confident
 strong rich free freedom proud relief reliable helpful useful clear easy
-fascinating exciting promising ideal cheerful brave thrilled`;
+fascinating exciting promising ideal cheerful brave thrilled
+recommend recommended recommending worth incredible incredibly satisfied
+satisfying satisfaction smooth intuitive flawless stable professional friendly
+efficient quick fast responsive polite courteous comfortable accessible
+affordable reasonable valuable solid impressive impressed delighted enjoyable
+loved adorable polished gorgeous terrific stellar exceptional extraordinary
+cute pretty stylish handy convenient generous beautiful sleek welcoming
+delicious tasty cosy genuine authentic honest
+like liked liking likes appreciate appreciated favorite favourite preferred
+worthwhile cool decent fine alright`;
 
 const POS_EN_STRONG = `amazing wonderful fantastic excellent perfect awesome
-brilliant outstanding superb marvelous love best`;
+brilliant outstanding superb marvelous love best incredible flawless stellar
+recommend exceptional extraordinary`;
 
 const NEG_EN = `bad terrible awful horrible worst hate hatred sad sadness fear
-anger angry fail failure disappointing disappointed disaster painful pain
-suffering ugly boring poor problem difficult hard worried anxiety despair cruel
-unfair miserable mediocre annoying nasty wrong loss lose lost lonely dark broke
-broken weak fake danger threat shame guilty bitter disgust horror stress
-conflict war violence lie betray sick tired stupid useless hopeless toxic`;
+anger angry fail failure disappointing disappointed disappointment disaster
+painful pain suffering ugly boring poor problem difficult hard worried anxiety
+despair cruel unfair miserable mediocre annoying nasty wrong loss lose lost
+lonely dark broke broken weak fake danger threat shame guilty bitter disgust
+horror stress conflict war violence lie betray sick tired stupid useless
+hopeless toxic
+regret regretted scam scammed fraud fraudulent rude impolite arrogant
+unprofessional unhelpful garbage trash waste wasted overpriced confusing buggy
+defective shoddy unstable unreliable slow late delayed misleading dishonest
+counterfeit unsatisfactory unsatisfied unacceptable lousy pathetic appalling
+horrendous disgusting gross nasty awful sloppy faulty cheap`;
 
 const NEG_EN_STRONG = `terrible awful horrible worst hate disaster despair
-atrocious horror dreadful catastrophe`;
+atrocious horror dreadful catastrophe appalling horrendous disgusting fraud
+scam unacceptable garbage`;
 
 const NEGATORS = new Set(
   `ne n pas plus jamais rien aucun aucune sans ni non personne
