@@ -37,6 +37,8 @@ const messages = {
     "tabs.kwic": "Concordance",
     "tabs.source": "Texte",
     "tabs.corpus": "Corpus",
+    "tabs.spec": "Spécificités",
+    "tabs.prog": "Progression",
 
     "view.export": "⤓ Exporter en PDF",
     "view.welcome": "Bienvenue dans Mo-Grid",
@@ -216,6 +218,28 @@ const messages = {
     "cp.avg": "Moyenne",
     "cp.median": "Médiane",
 
+    "xp.intro":
+      "Spécificités du document actif comparé au reste du corpus (test du rapport de vraisemblance G²). Sur-représentés = caractéristiques de ce document ; sous-représentés = rares ici par rapport au reste.",
+    "xp.need": "Ajoutez d'autres documents au corpus pour calculer les spécificités.",
+    "xp.over": "Sur-représentés",
+    "xp.under": "Sous-représentés",
+    "xp.word": "Mot",
+    "xp.fSub": "Doc.",
+    "xp.fRest": "Reste",
+    "xp.score": "Score G²",
+    "xp.empty": "Aucun mot suffisamment fréquent.",
+
+    "pg.intro":
+      "Distribution d'un mot-clé sur la longueur du texte : positions (tirets sur la barre) et densité par segment.",
+    "pg.placeholder": "Mot-clé à suivre…",
+    "pg.case": "Respecter la casse",
+    "pg.occurrences": "occurrence(s)",
+    "pg.over": "sur",
+    "pg.tokens": "mots",
+    "pg.bins": "Segments",
+    "pg.empty": "Saisissez un mot pour suivre sa progression dans le texte.",
+    "pg.notFound": "Mot introuvable dans le texte.",
+
     "rp.title": "Mo-Grid — Rapport d'analyse linguistique",
     "rp.document": "Document",
     "rp.edited": "Édité le",
@@ -258,6 +282,8 @@ const messages = {
     "tabs.kwic": "Concordance",
     "tabs.source": "Text",
     "tabs.corpus": "Corpus",
+    "tabs.spec": "Specificities",
+    "tabs.prog": "Progression",
 
     "view.export": "⤓ Export to PDF",
     "view.welcome": "Welcome to Mo-Grid",
@@ -434,6 +460,28 @@ const messages = {
     "cp.avg": "Average",
     "cp.median": "Median",
 
+    "xp.intro":
+      "Specificities of the active document vs. the rest of the corpus (log-likelihood ratio G²). Over-represented = characteristic words; under-represented = rare here compared to the rest.",
+    "xp.need": "Add more documents to the corpus to compute specificities.",
+    "xp.over": "Over-represented",
+    "xp.under": "Under-represented",
+    "xp.word": "Word",
+    "xp.fSub": "Doc.",
+    "xp.fRest": "Rest",
+    "xp.score": "G² score",
+    "xp.empty": "No word frequent enough.",
+
+    "pg.intro":
+      "Distribution of a keyword along the text: positions (ticks on the bar) and density per segment.",
+    "pg.placeholder": "Keyword to track…",
+    "pg.case": "Case sensitive",
+    "pg.occurrences": "occurrence(s)",
+    "pg.over": "of",
+    "pg.tokens": "words",
+    "pg.bins": "Segments",
+    "pg.empty": "Enter a word to follow its progression through the text.",
+    "pg.notFound": "Word not found in the text.",
+
     "rp.title": "Mo-Grid — Linguistic analysis report",
     "rp.document": "Document",
     "rp.edited": "Generated on",
@@ -476,6 +524,8 @@ const messages = {
     "tabs.kwic": "Concordancia",
     "tabs.source": "Texto",
     "tabs.corpus": "Corpus",
+    "tabs.spec": "Especificidades",
+    "tabs.prog": "Progresión",
 
     "view.export": "⤓ Exportar a PDF",
     "view.welcome": "Bienvenido a Mo-Grid",
@@ -653,6 +703,28 @@ const messages = {
     "cp.avg": "Promedio",
     "cp.median": "Mediana",
 
+    "xp.intro":
+      "Especificidades del documento activo frente al resto del corpus (razón de verosimilitud G²). Sobre-representadas = características del documento; sub-representadas = raras aquí frente al resto.",
+    "xp.need": "Añada más documentos al corpus para calcular las especificidades.",
+    "xp.over": "Sobre-representadas",
+    "xp.under": "Sub-representadas",
+    "xp.word": "Palabra",
+    "xp.fSub": "Doc.",
+    "xp.fRest": "Resto",
+    "xp.score": "Puntuación G²",
+    "xp.empty": "Ninguna palabra suficientemente frecuente.",
+
+    "pg.intro":
+      "Distribución de una palabra clave a lo largo del texto: posiciones (marcas en la barra) y densidad por segmento.",
+    "pg.placeholder": "Palabra clave a seguir…",
+    "pg.case": "Distinguir mayúsculas",
+    "pg.occurrences": "ocurrencia(s)",
+    "pg.over": "de",
+    "pg.tokens": "palabras",
+    "pg.bins": "Segmentos",
+    "pg.empty": "Escriba una palabra para seguir su progresión en el texto.",
+    "pg.notFound": "Palabra no encontrada en el texto.",
+
     "rp.title": "Mo-Grid — Informe de análisis lingüístico",
     "rp.document": "Documento",
     "rp.edited": "Generado el",
@@ -695,6 +767,8 @@ const messages = {
     "tabs.kwic": "Конкорданс",
     "tabs.source": "Текст",
     "tabs.corpus": "Корпус",
+    "tabs.spec": "Специфичности",
+    "tabs.prog": "Распределение",
 
     "view.export": "⤓ Экспорт в PDF",
     "view.welcome": "Добро пожаловать в Mo-Grid",
@@ -870,6 +944,28 @@ const messages = {
     "cp.max": "Макс",
     "cp.avg": "Среднее",
     "cp.median": "Медиана",
+
+    "xp.intro":
+      "Специфичности активного документа по сравнению с остальным корпусом (тест отношения правдоподобия G²). Сверхпредставленные — характерные для документа; недопредставленные — редкие здесь по сравнению с остальным.",
+    "xp.need": "Добавьте больше документов в корпус, чтобы вычислить специфичности.",
+    "xp.over": "Сверхпредставленные",
+    "xp.under": "Недопредставленные",
+    "xp.word": "Слово",
+    "xp.fSub": "Док.",
+    "xp.fRest": "Остаток",
+    "xp.score": "Оценка G²",
+    "xp.empty": "Нет достаточно частого слова.",
+
+    "pg.intro":
+      "Распределение ключевого слова по длине текста: позиции (метки на полосе) и плотность по сегментам.",
+    "pg.placeholder": "Ключевое слово для отслеживания…",
+    "pg.case": "Учитывать регистр",
+    "pg.occurrences": "вхождение(й)",
+    "pg.over": "из",
+    "pg.tokens": "слов",
+    "pg.bins": "Сегменты",
+    "pg.empty": "Введите слово, чтобы проследить его распределение в тексте.",
+    "pg.notFound": "Слово в тексте не найдено.",
 
     "rp.title": "Mo-Grid — Отчёт лингвистического анализа",
     "rp.document": "Документ",
