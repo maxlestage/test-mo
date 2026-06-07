@@ -11,10 +11,36 @@ export function normalize(value) {
 
 const WORD_RE = /\p{L}[\p{L}\p{M}]*(?:-[\p{L}\p{M}]+)*/gu;
 
+// Étend les contractions anglaises pour préserver la négation et le
+// sens : « don't like » -> « do not like », « I'm happy » -> « I am
+// happy ». Les motifs sont spécifiques à l'anglais ; le français
+// (« l'arbre », « qu'il », « n'oublie »…) n'est pas affecté.
+const CONTRACTIONS = [
+  [/\bwon['’]t\b/gi, "will not"],
+  [/\bshan['’]t\b/gi, "shall not"],
+  [/\bain['’]t\b/gi, "am not"],
+  [/\b(\w+)n['’]t\b/gi, "$1 not"],
+  [/\bI['’]m\b/g, "I am"],
+  [/\b(you|we|they)['’]re\b/gi, "$1 are"],
+  [/\b(I|you|we|they)['’]ve\b/gi, "$1 have"],
+  [/\b(I|you|he|she|it|we|they)['’]ll\b/gi, "$1 will"],
+  [/\b(I|you|he|she|it|we|they)['’]d\b/gi, "$1 would"],
+  [/\b(it|he|she|that|there|here|what|who|where|when|how)['’]s\b/gi, "$1 is"],
+  [/\blet['’]s\b/gi, "let us"],
+];
+
+export function expandContractions(s) {
+  let out = String(s ?? "");
+  for (const [re, rep] of CONTRACTIONS) out = out.replace(re, rep);
+  return out;
+}
+
 // Découpe un texte en mots. Les traits d'union internes sont conservés
-// ("peut-être"), les apostrophes séparent les clitiques ("l'arbre" -> l, arbre).
+// ("peut-être"), les apostrophes séparent les clitiques français
+// ("l'arbre" -> l, arbre) ; les contractions anglaises sont d'abord
+// étendues pour que la négation et le sens soient préservés.
 export function tokenizeWords(text, { lowercase = true } = {}) {
-  const source = normalize(text);
+  const source = expandContractions(normalize(text));
   const matches = source.match(WORD_RE) || [];
   return lowercase ? matches.map((w) => w.toLowerCase()) : matches;
 }
