@@ -39,6 +39,9 @@ const messages = {
     "tabs.corpus": "Corpus",
     "tabs.spec": "Spécificités",
     "tabs.prog": "Progression",
+    "tabs.cooc": "Cooccurrences",
+    "tabs.part": "Partition",
+    "tabs.index": "Index",
 
     "view.export": "⤓ Exporter en PDF",
     "view.welcome": "Bienvenue dans Mo-Grid",
@@ -240,6 +243,38 @@ const messages = {
     "pg.empty": "Saisissez un mot pour suivre sa progression dans le texte.",
     "pg.notFound": "Mot introuvable dans le texte.",
 
+    "co.intro":
+      "Mots qui apparaissent autour d'un mot-clé (fenêtre ±N), notés par G². Score positif = attiré par le mot-clé.",
+    "co.placeholder": "Mot-clé…",
+    "co.window": "Fenêtre",
+    "co.case": "Respecter la casse",
+    "co.keywordOcc": "occurrence(s) du mot-clé",
+    "co.word": "Mot",
+    "co.fWindow": "Fenêtre",
+    "co.fTotal": "Total",
+    "co.score": "Score G²",
+    "co.empty": "Saisissez un mot-clé pour calculer les cooccurrences.",
+    "co.notFound": "Mot introuvable dans le texte.",
+
+    "pt.intro":
+      "Comparez deux sous-corpus librement composés à partir de vos documents (test G² — spécificités d'A vs B).",
+    "pt.groupA": "Groupe A",
+    "pt.groupB": "Groupe B",
+    "pt.ignore": "Ignorer",
+    "pt.need": "Affectez au moins un document à chaque groupe.",
+    "pt.empty": "Aucun mot suffisamment fréquent.",
+    "pt.over": "Caractéristiques d'A",
+    "pt.under": "Caractéristiques de B",
+
+    "ix.intro":
+      "Index alphabétique de toutes les formes du document avec leur fréquence.",
+    "ix.filter": "Filtrer (préfixe)…",
+    "ix.word": "Forme",
+    "ix.count": "Occ.",
+    "ix.freq": "Fréq.",
+    "ix.results": "formes",
+    "ix.empty": "Aucune forme correspondante.",
+
     "rp.title": "Mo-Grid — Rapport d'analyse linguistique",
     "rp.document": "Document",
     "rp.edited": "Édité le",
@@ -284,6 +319,9 @@ const messages = {
     "tabs.corpus": "Corpus",
     "tabs.spec": "Specificities",
     "tabs.prog": "Progression",
+    "tabs.cooc": "Cooccurrences",
+    "tabs.part": "Partition",
+    "tabs.index": "Index",
 
     "view.export": "⤓ Export to PDF",
     "view.welcome": "Welcome to Mo-Grid",
@@ -482,6 +520,38 @@ const messages = {
     "pg.empty": "Enter a word to follow its progression through the text.",
     "pg.notFound": "Word not found in the text.",
 
+    "co.intro":
+      "Words that occur around a keyword (window ±N), scored by G². Positive score = attracted by the keyword.",
+    "co.placeholder": "Keyword…",
+    "co.window": "Window",
+    "co.case": "Case sensitive",
+    "co.keywordOcc": "keyword occurrence(s)",
+    "co.word": "Word",
+    "co.fWindow": "Window",
+    "co.fTotal": "Total",
+    "co.score": "G² score",
+    "co.empty": "Enter a keyword to compute cooccurrences.",
+    "co.notFound": "Word not found in the text.",
+
+    "pt.intro":
+      "Compare two freely composed sub-corpora from your documents (G² test — specificities of A vs B).",
+    "pt.groupA": "Group A",
+    "pt.groupB": "Group B",
+    "pt.ignore": "Ignore",
+    "pt.need": "Assign at least one document to each group.",
+    "pt.empty": "No word frequent enough.",
+    "pt.over": "Characteristic of A",
+    "pt.under": "Characteristic of B",
+
+    "ix.intro":
+      "Alphabetical index of every word-form in the document with its frequency.",
+    "ix.filter": "Filter (prefix)…",
+    "ix.word": "Form",
+    "ix.count": "Occ.",
+    "ix.freq": "Freq.",
+    "ix.results": "forms",
+    "ix.empty": "No matching form.",
+
     "rp.title": "Mo-Grid — Linguistic analysis report",
     "rp.document": "Document",
     "rp.edited": "Generated on",
@@ -526,6 +596,9 @@ const messages = {
     "tabs.corpus": "Corpus",
     "tabs.spec": "Especificidades",
     "tabs.prog": "Progresión",
+    "tabs.cooc": "Coocurrencias",
+    "tabs.part": "Partición",
+    "tabs.index": "Índice",
 
     "view.export": "⤓ Exportar a PDF",
     "view.welcome": "Bienvenido a Mo-Grid",
@@ -725,6 +798,38 @@ const messages = {
     "pg.empty": "Escriba una palabra para seguir su progresión en el texto.",
     "pg.notFound": "Palabra no encontrada en el texto.",
 
+    "co.intro":
+      "Palabras que aparecen alrededor de una palabra clave (ventana ±N), puntuadas por G². Puntuación positiva = atraída por la palabra clave.",
+    "co.placeholder": "Palabra clave…",
+    "co.window": "Ventana",
+    "co.case": "Distinguir mayúsculas",
+    "co.keywordOcc": "ocurrencia(s) de la palabra clave",
+    "co.word": "Palabra",
+    "co.fWindow": "Ventana",
+    "co.fTotal": "Total",
+    "co.score": "Puntuación G²",
+    "co.empty": "Escriba una palabra clave para calcular las coocurrencias.",
+    "co.notFound": "Palabra no encontrada en el texto.",
+
+    "pt.intro":
+      "Compare dos subcorpus libremente compuestos a partir de sus documentos (prueba G² — especificidades de A vs B).",
+    "pt.groupA": "Grupo A",
+    "pt.groupB": "Grupo B",
+    "pt.ignore": "Ignorar",
+    "pt.need": "Asigne al menos un documento a cada grupo.",
+    "pt.empty": "Ninguna palabra suficientemente frecuente.",
+    "pt.over": "Característica de A",
+    "pt.under": "Característica de B",
+
+    "ix.intro":
+      "Índice alfabético de todas las formas del documento con su frecuencia.",
+    "ix.filter": "Filtrar (prefijo)…",
+    "ix.word": "Forma",
+    "ix.count": "Oc.",
+    "ix.freq": "Frec.",
+    "ix.results": "formas",
+    "ix.empty": "Ninguna forma coincidente.",
+
     "rp.title": "Mo-Grid — Informe de análisis lingüístico",
     "rp.document": "Documento",
     "rp.edited": "Generado el",
@@ -769,6 +874,9 @@ const messages = {
     "tabs.corpus": "Корпус",
     "tabs.spec": "Специфичности",
     "tabs.prog": "Распределение",
+    "tabs.cooc": "Совместные вхождения",
+    "tabs.part": "Разбиение",
+    "tabs.index": "Индекс",
 
     "view.export": "⤓ Экспорт в PDF",
     "view.welcome": "Добро пожаловать в Mo-Grid",
@@ -966,6 +1074,38 @@ const messages = {
     "pg.bins": "Сегменты",
     "pg.empty": "Введите слово, чтобы проследить его распределение в тексте.",
     "pg.notFound": "Слово в тексте не найдено.",
+
+    "co.intro":
+      "Слова, появляющиеся вокруг ключевого слова (окно ±N), оцениваются по G². Положительная оценка = притягивается ключевым словом.",
+    "co.placeholder": "Ключевое слово…",
+    "co.window": "Окно",
+    "co.case": "Учитывать регистр",
+    "co.keywordOcc": "вхождение(й) ключевого слова",
+    "co.word": "Слово",
+    "co.fWindow": "Окно",
+    "co.fTotal": "Всего",
+    "co.score": "Оценка G²",
+    "co.empty": "Введите ключевое слово для вычисления совместных вхождений.",
+    "co.notFound": "Слово в тексте не найдено.",
+
+    "pt.intro":
+      "Сравните два свободно составленных подкорпуса из ваших документов (тест G² — специфичности A против B).",
+    "pt.groupA": "Группа A",
+    "pt.groupB": "Группа B",
+    "pt.ignore": "Игнорировать",
+    "pt.need": "Назначьте хотя бы один документ в каждую группу.",
+    "pt.empty": "Нет достаточно частого слова.",
+    "pt.over": "Характерные для A",
+    "pt.under": "Характерные для B",
+
+    "ix.intro":
+      "Алфавитный индекс всех форм документа с их частотой.",
+    "ix.filter": "Фильтр (префикс)…",
+    "ix.word": "Форма",
+    "ix.count": "Вхож.",
+    "ix.freq": "Част.",
+    "ix.results": "форм",
+    "ix.empty": "Соответствующих форм нет.",
 
     "rp.title": "Mo-Grid — Отчёт лингвистического анализа",
     "rp.document": "Документ",

@@ -71,6 +71,76 @@ export function specificities(
     .slice(0, top);
 }
 
+// Cooccurrences contextuelles d'un mot-clé : pour chaque mot, sa
+// fréquence dans les fenêtres ±W autour des occurrences du mot-clé,
+// notée par G² signé. Score positif = attire le mot-clé.
+export function cooccurrences(
+  text,
+  keyword,
+  {
+    window = 5,
+    caseSensitive = false,
+    lang,
+    removeStopwords = true,
+    minFreq = 2,
+    top = 30,
+  } = {}
+) {
+  const target = caseSensitive ? keyword : keyword.toLowerCase();
+  if (!target) return { totalIn: 0, totalOut: 0, keywordCount: 0, rows: [] };
+  const tokens = tokenizeWords(text, { lowercase: !caseSensitive });
+  const N = tokens.length;
+  if (!N) return { totalIn: 0, totalOut: 0, keywordCount: 0, rows: [] };
+
+  const inContext = new Uint8Array(N);
+  let keywordCount = 0;
+  for (let i = 0; i < N; i++) {
+    if (tokens[i] === target) {
+      keywordCount++;
+      const from = Math.max(0, i - window);
+      const to = Math.min(N - 1, i + window);
+      for (let j = from; j <= to; j++) {
+        if (j !== i) inContext[j] = 1;
+      }
+    }
+  }
+
+  const inCount = new Map();
+  const totalCount = new Map();
+  for (let i = 0; i < N; i++) {
+    const w = tokens[i];
+    if (w === target) continue;
+    if (removeStopwords && lang && isStopword(w, lang)) continue;
+    totalCount.set(w, (totalCount.get(w) || 0) + 1);
+    if (inContext[i]) inCount.set(w, (inCount.get(w) || 0) + 1);
+  }
+
+  let totalIn = 0;
+  for (const v of inCount.values()) totalIn += v;
+  let totalAll = 0;
+  for (const v of totalCount.values()) totalAll += v;
+  const totalOut = totalAll - totalIn;
+
+  const rows = [];
+  for (const [w, f] of totalCount) {
+    if (f < minFreq) continue;
+    const a = inCount.get(w) || 0;
+    const b = totalIn - a;
+    const c = f - a;
+    const d = totalOut - c;
+    const score = signedG2(a, b, c, d);
+    rows.push({ word: w, fWindow: a, fTotal: f, score });
+  }
+  return {
+    totalIn,
+    totalOut,
+    keywordCount,
+    rows: rows
+      .sort((x, y) => Math.abs(y.score) - Math.abs(x.score))
+      .slice(0, top),
+  };
+}
+
 // Progression d'un mot-clé : positions relatives (0..1) des
 // occurrences, plus densité par bin.
 export function progression(text, keyword, { bins = 20, caseSensitive = false } = {}) {

@@ -17,6 +17,9 @@ import SourceTextPanel from "./panels/SourceTextPanel.vue";
 import CorpusPanel from "./panels/CorpusPanel.vue";
 import SpecificitiesPanel from "./panels/SpecificitiesPanel.vue";
 import ProgressionPanel from "./panels/ProgressionPanel.vue";
+import CooccurrencesPanel from "./panels/CooccurrencesPanel.vue";
+import PartitionPanel from "./panels/PartitionPanel.vue";
+import IndexPanel from "./panels/IndexPanel.vue";
 import ReportView from "./ReportView.vue";
 
 const { document, hasContent } = useAnalysis();
@@ -40,13 +43,16 @@ const tabs = [
   { id: "source", key: "tabs.source", comp: SourceTextPanel },
   { id: "overview", key: "tabs.overview", comp: OverviewPanel },
   { id: "frequency", key: "tabs.frequency", comp: FrequencyPanel },
+  { id: "index", key: "tabs.index", comp: IndexPanel },
   { id: "spec", key: "tabs.spec", comp: SpecificitiesPanel },
+  { id: "part", key: "tabs.part", comp: PartitionPanel },
   { id: "diversity", key: "tabs.diversity", comp: DiversityPanel },
   { id: "readability", key: "tabs.readability", comp: ReadabilityPanel },
   { id: "sentiment", key: "tabs.sentiment", comp: SentimentPanel },
   { id: "speakers", key: "tabs.speakers", comp: SpeakersPanel },
   { id: "ngram", key: "tabs.ngram", comp: NgramPanel },
   { id: "kwic", key: "tabs.kwic", comp: ConcordancePanel },
+  { id: "cooc", key: "tabs.cooc", comp: CooccurrencesPanel },
   { id: "prog", key: "tabs.prog", comp: ProgressionPanel },
   { id: "corpus", key: "tabs.corpus", comp: CorpusPanel },
 ];
