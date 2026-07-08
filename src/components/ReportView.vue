@@ -18,6 +18,7 @@ const {
   diversity,
   readability,
   sentiment,
+  emotions,
   speakers,
   frequencies,
   words,
@@ -121,6 +122,24 @@ const senti = computed(() => {
   ];
 });
 
+const emo = computed(() => {
+  const e = emotions.value;
+  const top = e.distribution
+    .filter((d) => d.score > 0)
+    .slice(0, 3)
+    .map((d) => `${t("emo." + d.emotion)} ${(d.share * 100).toFixed(0)} %`)
+    .join(" · ");
+  return [
+    [t("em.dominant"), e.dominant ? t("emo." + e.dominant) : t("em.none")],
+    [
+      t("em.sensIndex"),
+      `${e.sensitivity.index} / 100 (${t("em.lvl." + e.sensitivity.label)})`,
+    ],
+    [t("st.emo"), e.emotionalWords],
+    [t("em.dist"), top || "—"],
+  ];
+});
+
 const topWords = computed(() => frequencies.value.slice(0, 20));
 const topBigrams = computed(() =>
   ngrams(words.value, 2, { lang: lang.value, removeStopwords: true }).slice(0, 12)
@@ -188,6 +207,18 @@ const spk = computed(() => speakers.value);
       <table>
         <tbody>
           <tr v-for="[k, v] in senti" :key="k">
+            <td>{{ k }}</td>
+            <td class="v">{{ v }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>{{ t("rp.sEmotions") }}</h2>
+      <table>
+        <tbody>
+          <tr v-for="[k, v] in emo" :key="k">
             <td>{{ k }}</td>
             <td class="v">{{ v }}</td>
           </tr>

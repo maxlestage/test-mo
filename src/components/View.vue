@@ -12,6 +12,7 @@ import ReadabilityPanel from "./panels/ReadabilityPanel.vue";
 import NgramPanel from "./panels/NgramPanel.vue";
 import ConcordancePanel from "./panels/ConcordancePanel.vue";
 import SentimentPanel from "./panels/SentimentPanel.vue";
+import EmotionsPanel from "./panels/EmotionsPanel.vue";
 import SpeakersPanel from "./panels/SpeakersPanel.vue";
 import SourceTextPanel from "./panels/SourceTextPanel.vue";
 import CorpusPanel from "./panels/CorpusPanel.vue";
@@ -49,6 +50,7 @@ const tabs = [
   { id: "diversity", key: "tabs.diversity", comp: DiversityPanel },
   { id: "readability", key: "tabs.readability", comp: ReadabilityPanel },
   { id: "sentiment", key: "tabs.sentiment", comp: SentimentPanel },
+  { id: "emotions", key: "tabs.emotions", comp: EmotionsPanel },
   { id: "speakers", key: "tabs.speakers", comp: SpeakersPanel },
   { id: "ngram", key: "tabs.ngram", comp: NgramPanel },
   { id: "kwic", key: "tabs.kwic", comp: ConcordancePanel },

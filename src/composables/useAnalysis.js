@@ -13,6 +13,7 @@ import {
   wordLengthDistribution,
 } from "../libs/linguistics.js";
 import { analyzeSentiment } from "../libs/sentiment.js";
+import { analyzeEmotions } from "../libs/emotions.js";
 import { analyzeSpeakers } from "../libs/speakers.js";
 
 export function useAnalysis() {
@@ -43,6 +44,8 @@ export function useAnalysis() {
 
   const sentiment = computed(() => analyzeSentiment(text.value));
 
+  const emotions = computed(() => analyzeEmotions(text.value));
+
   const speakers = computed(() => analyzeSpeakers(text.value));
 
   return {
@@ -57,6 +60,7 @@ export function useAnalysis() {
     readability,
     wordLengths,
     sentiment,
+    emotions,
     speakers,
     settings,
   };
