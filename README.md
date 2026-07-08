@@ -9,6 +9,13 @@ coulissant) comme sur desktop.
 
 Construit avec **Vue 3** (`<script setup>`) + **Vite** + **Pinia**.
 
+## Déployer en un clic
+
+Depuis un téléphone ou un ordinateur, sans rien installer — connecte-toi à
+Heroku, choisis un nom d'app, valide :
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/maxlestage/test-mo)
+
 ## Fonctionnalités
 
 - **Gestion de corpus** : import glisser-déposer (`.txt`, `.md`, `.csv`),
