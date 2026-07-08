@@ -1,9 +1,8 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
-// Déployé en tant que page de projet GitHub Pages :
-// https://maxlestage.github.io/test-mo/  -> base = "/test-mo/"
+// Déployé sur Heroku à la racine du domaine -> base = "/".
 export default defineConfig({
-  base: "/test-mo/",
+  base: "/",
   plugins: [vue()],
 });

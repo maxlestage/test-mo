@@ -22,6 +22,10 @@ Construit avec **Vue 3** (`<script setup>`) + **Vite** + **Pinia**.
   Herdan, indice a² de Maas, hapax legomena.
 - **Lisibilité** : Flesch Reading Ease & Flesch–Kincaid (EN),
   adaptation Kandel & Moles (FR), indice LIX (indépendant de la langue).
+- **Émotions & sensibilité** : détection des huit émotions de base
+  (roue de Plutchik — joie, tristesse, colère, peur, surprise, dégoût,
+  confiance, anticipation) et indice de sensibilité émotionnelle
+  (densité, couverture, intensité), avec négation et intensifieurs.
 - **N-grammes & collocations** : bi/tri/quadri-grammes, cooccurrences
   notées par information mutuelle ponctuelle (PMI).
 - **Concordance (KWIC)** : occurrences d'un mot-clé en contexte.
@@ -36,6 +40,8 @@ src/
     stopwords.js    listes de mots vides FR/EN + détection de langue
     linguistics.js  fréquences, diversité, n-grammes, collocations, KWIC
     readability.js  indices de lisibilité
+    sentiment.js    sentiment lexical FR/EN (polarité)
+    emotions.js     émotions (Plutchik) + sensibilité émotionnelle
   stores/
     corpus.js       store Pinia (documents, document actif, réglages)
   composables/
@@ -53,6 +59,28 @@ bun run dev       # serveur de développement
 bun run build     # build de production
 bun run preview   # prévisualisation du build
 ```
+
+## Déploiement sur Heroku
+
+L'application est servie par un petit serveur Node sans dépendance
+(`server.js`) qui expose le build Vite (`dist/`) avec repli SPA.
+Heroku détecte le buildpack **Node.js**, exécute `heroku-postbuild`
+(= `vite build`) puis lance le `Procfile` (`web: node server.js`).
+
+```bash
+# une seule fois
+heroku login
+heroku create mon-app-mo-grid
+
+# déployer (depuis la branche à publier)
+git push heroku master        # ou : git push heroku ma-branche:main
+heroku open
+```
+
+Fichiers concernés : `Procfile`, `server.js`, `app.json`,
+scripts `start` / `heroku-postbuild` dans `package.json`.
+Aucune variable d'environnement n'est requise (`PORT` est fourni par
+Heroku). Le déploiement GitHub Pages a été retiré.
 
 ## IDE recommandé
 
