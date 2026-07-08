@@ -60,6 +60,28 @@ bun run build     # build de production
 bun run preview   # prévisualisation du build
 ```
 
+## Déploiement sur Heroku
+
+L'application est servie par un petit serveur Node sans dépendance
+(`server.js`) qui expose le build Vite (`dist/`) avec repli SPA.
+Heroku détecte le buildpack **Node.js**, exécute `heroku-postbuild`
+(= `vite build`) puis lance le `Procfile` (`web: node server.js`).
+
+```bash
+# une seule fois
+heroku login
+heroku create mon-app-mo-grid
+
+# déployer (depuis la branche à publier)
+git push heroku master        # ou : git push heroku ma-branche:main
+heroku open
+```
+
+Fichiers concernés : `Procfile`, `server.js`, `app.json`,
+scripts `start` / `heroku-postbuild` dans `package.json`.
+Aucune variable d'environnement n'est requise (`PORT` est fourni par
+Heroku). Le déploiement GitHub Pages a été retiré.
+
 ## IDE recommandé
 
 [VS Code](https://code.visualstudio.com/) +
