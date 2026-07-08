@@ -47,15 +47,30 @@ http
       file = path.join(ROOT, "index.html");
     }
 
+    // Si le build est absent (dist/ non généré), on répond proprement
+    // au lieu de laisser le flux planter le process.
+    if (!existsSync(file)) {
+      res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end(
+        "Build introuvable (dist/). Le script de build n'a pas été exécuté."
+      );
+      return;
+    }
+
     const ext = path.extname(file).toLowerCase();
     const immutable = /\/assets\//.test(file);
+    const stream = createReadStream(file);
+    stream.on("error", () => {
+      if (!res.headersSent) res.writeHead(404, { "Content-Type": "text/plain" });
+      res.end("Not found");
+    });
     res.writeHead(200, {
       "Content-Type": MIME[ext] || "application/octet-stream",
       "Cache-Control": immutable
         ? "public, max-age=31536000, immutable"
         : "no-cache",
     });
-    createReadStream(file).pipe(res);
+    stream.pipe(res);
   })
   .listen(PORT, () => {
     console.log(`Mo-Grid en écoute sur le port ${PORT} (dist/)`);
