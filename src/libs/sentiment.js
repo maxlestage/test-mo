@@ -81,13 +81,13 @@ const NEG_EN_STRONG = `terrible awful horrible worst hate disaster despair
 atrocious horror dreadful catastrophe appalling horrendous disgusting fraud
 scam unacceptable garbage`;
 
-const NEGATORS = new Set(
+export const NEGATORS = new Set(
   `ne n pas plus jamais rien aucun aucune sans ni non personne
    not no never none nobody nothing without cannot cant dont doesnt isnt arent
    wasnt werent neither nor hardly`.split(/\s+/).filter(Boolean)
 );
 
-const INTENSIFIERS = new Map([
+export const INTENSIFIERS = new Map([
   ["très", 1.6], ["trop", 1.5], ["vraiment", 1.5], ["extrêmement", 2],
   ["totalement", 1.7], ["absolument", 1.8], ["tellement", 1.6], ["si", 1.3],
   ["fort", 1.3], ["vachement", 1.6], ["super", 1.5], ["hyper", 1.7],
