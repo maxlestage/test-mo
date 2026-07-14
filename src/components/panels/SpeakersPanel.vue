@@ -9,6 +9,10 @@ const moodClass = (m) =>
   m === "positif" ? "level-easy" : m === "négatif" ? "level-hard" : "level-ok";
 const moodLabel = (m) => t("mood." + m);
 
+// Couleur pleine de la barre selon la positivité du locuteur.
+const barColor = (p) =>
+  p >= 55 ? "var(--ok)" : p <= 45 ? "var(--hard)" : "var(--warn)";
+
 const basisKey = {
   labels: "sp.basisLabels",
   tags: "sp.basisTags",
@@ -79,7 +83,10 @@ function displayName(name) {
           <span v-if="s.rating != null" class="stars">· ★ {{ s.rating }}/5</span>
         </div>
         <div class="bar">
-          <div class="bar-fill" :style="{ width: s.positivity + '%' }" />
+          <div
+            class="bar-fill"
+            :style="{ width: s.positivity + '%', background: barColor(s.positivity) }"
+          />
         </div>
         <div class="cap">{{ s.positivity }}/100</div>
 
@@ -229,7 +236,9 @@ h3 {
 }
 .bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--hard), var(--warn), var(--ok));
+  border-radius: 999px;
+  min-width: 8px;
+  transition: width 0.3s ease;
 }
 .cap {
   font-size: 0.74rem;
