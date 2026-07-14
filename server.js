@@ -43,6 +43,14 @@ http
       return;
     }
     if (!existsSync(file) || statSync(file).isDirectory()) {
+      // Un chemin de fichier (avec extension) manquant renvoie 404 :
+      // servir index.html à la place ferait mettre en cache du HTML
+      // comme favicon/icône par les navigateurs.
+      if (path.extname(safePath)) {
+        res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });
+        res.end("Not found");
+        return;
+      }
       // Repli SPA : toute route inconnue renvoie l'application.
       file = path.join(ROOT, "index.html");
     }
