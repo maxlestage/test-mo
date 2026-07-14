@@ -60,6 +60,16 @@ const tabs = [
 ];
 const active = ref("overview");
 
+// Mobile : recentrer l'onglet touché dans la barre défilante.
+function selectTab(id, ev) {
+  active.value = id;
+  ev.currentTarget.scrollIntoView({
+    behavior: "smooth",
+    inline: "center",
+    block: "nearest",
+  });
+}
+
 // Sur mobile, refermer le tiroir dès qu'un document devient actif.
 watch(
   () => document.value?.id,
@@ -87,7 +97,7 @@ watch(
               v-for="tab in tabs"
               :key="tab.id"
               :class="{ on: active === tab.id }"
-              @click="active = tab.id"
+              @click="selectTab(tab.id, $event)"
             >
               {{ t(tab.key) }}
             </button>
@@ -294,13 +304,21 @@ watch(
     display: block;
   }
   .topbar {
-    padding: 1rem 1rem 0;
+    padding: 1rem calc(1rem + env(safe-area-inset-right)) 0
+      calc(1rem + env(safe-area-inset-left));
+  }
+  /* Onglets plus hauts : plus faciles à viser au pouce. */
+  .tabs button {
+    padding: 0.75rem 0.95rem;
+    font-size: 0.9rem;
   }
   .panel-wrap {
-    padding: 1rem 1rem 2rem;
+    padding: 1rem calc(1rem + env(safe-area-inset-right))
+      calc(2rem + env(safe-area-inset-bottom))
+      calc(1rem + env(safe-area-inset-left));
   }
   .empty {
-    padding: 1.25rem 1rem 2rem;
+    padding: 1.25rem 1rem calc(2rem + env(safe-area-inset-bottom));
   }
 }
 </style>

@@ -67,7 +67,10 @@ const { toggle: toggleNav } = useNav();
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
+  /* Respecte l'encoche et les bords arrondis des téléphones. */
+  padding: calc(1rem + env(safe-area-inset-top))
+    calc(1.5rem + env(safe-area-inset-right)) 1rem
+    calc(1.5rem + env(safe-area-inset-left));
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
@@ -143,17 +146,30 @@ const { toggle: toggleNav } = useNav();
 @media (max-width: 860px) {
   .burger {
     display: flex;
+    width: 42px;
+    height: 42px;
   }
 }
 @media (max-width: 640px) {
   .app-header {
-    padding: 0.75rem 1rem;
+    padding: calc(0.6rem + env(safe-area-inset-top))
+      calc(1rem + env(safe-area-inset-right)) 0.6rem
+      calc(1rem + env(safe-area-inset-left));
   }
   .brand p {
     display: none;
   }
   .app-header .tag {
     display: none;
+  }
+  /* Cibles tactiles confortables. */
+  .theme-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  .lang-sel {
+    padding: 0.5rem 0.7rem;
   }
 }
 </style>
