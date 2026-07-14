@@ -3,7 +3,7 @@ import View from "./components/View.vue";
 import { useTheme } from "./composables/useTheme.js";
 import { useI18n } from "./i18n/index.js";
 import { useNav } from "./composables/useNav.js";
-import logoUrl from "./assets/orange_logo.png";
+import logoUrl from "./assets/logo.svg";
 
 const { theme, toggle } = useTheme();
 const { t, locale, setLocale, LOCALES } = useI18n();
@@ -22,7 +22,7 @@ const { toggle: toggleNav } = useNav();
         >
           <span></span><span></span><span></span>
         </button>
-        <img :src="logoUrl" class="logo" alt="Orange" />
+        <img :src="logoUrl" class="logo" alt="Mo-Grid" />
         <div>
           <h1>Mo-Grid</h1>
           <p>{{ t("app.tagline") }}</p>

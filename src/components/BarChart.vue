@@ -54,7 +54,7 @@ const max = computed(() =>
 .fill {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #ff9c45);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
   border-radius: 5px;
   transition: width 0.3s ease;
 }
