@@ -215,6 +215,10 @@ h2 {
     transition: transform 0.25s ease;
     z-index: 50;
     box-shadow: 6px 0 28px #000a;
+    /* Encoche et barre du bas des téléphones. */
+    padding-left: calc(1.25rem + env(safe-area-inset-left));
+    padding-bottom: calc(1.25rem + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
   }
   .manager.open {
     transform: none;

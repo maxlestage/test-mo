@@ -8,6 +8,7 @@
   --accent: #5b9bef;
   --accent-2: #9cc3f5;
   --accent-soft: #5b9bef22;
+  --accent-contrast: #0c1a30;
   --ok: #3ecf8e;
   --warn: #f5b945;
   --hard: #f1606a;
@@ -27,6 +28,7 @@
   --accent: #2f6cc4;
   --accent-2: #6ea3e8;
   --accent-soft: #2f6cc41f;
+  --accent-contrast: #ffffff;
   --ok: #0f8a4d;
   --warn: #9a6a10;
   --hard: #c92f3a;
@@ -66,6 +68,30 @@ button {
   cursor: pointer;
 }
 
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile first : sur écran tactile ou étroit, les contrôles passent à
+   16px (empêche le zoom automatique d'iOS à la saisie) et les cibles
+   tactiles atteignent ~44px. */
+@media (max-width: 640px), (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  .btn {
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
 a {
   color: var(--accent);
 }
@@ -94,7 +120,7 @@ a {
 .btn-primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: #1a1100;
+  color: var(--accent-contrast);
   font-weight: 600;
 }
 .btn-primary:hover {
