@@ -14,6 +14,13 @@ const levelClass = computed(() => {
 
 const moodLabel = computed(() => t("mood." + sentiment.value.label));
 
+// Couleur pleine selon la valeur : lisible d'un coup d'œil, sans
+// dégradé écrasé ni couture au niveau de la valeur.
+const gaugeColor = computed(() => {
+  const p = sentiment.value.positivity;
+  return p >= 55 ? "var(--ok)" : p <= 45 ? "var(--hard)" : "var(--warn)";
+});
+
 const distribution = computed(() => {
   const c = sentiment.value.counts;
   return [
@@ -33,7 +40,13 @@ const distribution = computed(() => {
         <span class="kicker">{{ t("st.global") }}</span>
         <span class="label" :class="levelClass">{{ moodLabel }}</span>
         <div class="gauge">
-          <div class="gauge-fill" :style="{ width: sentiment.positivity + '%' }" />
+          <div
+            class="gauge-fill"
+            :style="{
+              width: sentiment.positivity + '%',
+              background: gaugeColor,
+            }"
+          />
         </div>
         <span class="gauge-cap">
           {{ t("st.positivity") }} :
@@ -168,16 +181,17 @@ const distribution = computed(() => {
 .gauge {
   height: 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--hard), var(--warn), var(--ok));
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   position: relative;
-  opacity: 0.35;
+  overflow: hidden;
 }
 .gauge-fill {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--hard), var(--warn), var(--ok));
-  opacity: 1;
+  min-width: 10px;
+  transition: width 0.3s ease, background 0.3s ease;
 }
 .gauge-cap {
   font-size: 0.8rem;

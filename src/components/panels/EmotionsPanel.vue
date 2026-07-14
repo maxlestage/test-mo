@@ -31,6 +31,12 @@ const sensClass = computed(() => {
   return i < 25 ? "level-easy" : i < 60 ? "level-ok" : "level-hard";
 });
 
+// Couleur pleine de la jauge selon le niveau de sensibilité.
+const gaugeColor = computed(() => {
+  const i = emotions.value.sensitivity.index;
+  return i < 25 ? "var(--ok)" : i < 60 ? "var(--warn)" : "var(--hard)";
+});
+
 const activeEmotions = computed(() =>
   EMOTIONS.filter((e) => emotions.value.topWords[e].length)
 );
@@ -49,7 +55,10 @@ const pct = (v) => (v * 100).toFixed(1) + " %";
         <div class="gauge">
           <div
             class="gauge-fill"
-            :style="{ width: emotions.sensitivity.index + '%' }"
+            :style="{
+              width: emotions.sensitivity.index + '%',
+              background: gaugeColor,
+            }"
           />
         </div>
         <span class="gauge-cap">
@@ -196,16 +205,17 @@ const pct = (v) => (v * 100).toFixed(1) + " %";
 .gauge {
   height: 10px;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--ok), var(--warn), var(--hard));
+  background: var(--surface-2);
+  border: 1px solid var(--border);
   position: relative;
-  opacity: 0.35;
+  overflow: hidden;
 }
 .gauge-fill {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--ok), var(--warn), var(--hard));
-  opacity: 1;
+  min-width: 10px;
+  transition: width 0.3s ease, background 0.3s ease;
 }
 .gauge-cap {
   font-size: 0.8rem;
