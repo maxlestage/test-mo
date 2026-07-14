@@ -45,6 +45,9 @@ body {
   color: var(--text);
   font-family: var(--sans);
   min-height: 100vh;
+  /* Pas de rebond élastique du navigateur : la page ne « flotte »
+     plus verticalement sur mobile, seuls les panneaux défilent. */
+  overscroll-behavior: none;
 }
 
 #app {
@@ -132,6 +135,16 @@ a {
   html,
   body {
     background: #fff !important;
+  }
+  /* Neutraliser les conteneurs à défilement pour que le rapport
+     s'étale sur plusieurs pages sans être rogné. */
+  .app,
+  .layout,
+  .content,
+  .panel-wrap {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
   }
   body * {
     visibility: hidden;

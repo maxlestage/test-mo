@@ -156,16 +156,23 @@ watch(
 .content {
   flex: 1;
   min-width: 0;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+/* L'en-tête (titre + onglets) est hors de la zone de défilement :
+   il reste parfaitement immobile, seul le contenu du panneau défile. */
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 5;
+  flex-shrink: 0;
   background: var(--bg);
   padding: 1.5rem 2rem 0;
 }
 .panel-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 1.25rem 2rem 2rem;
 }
 .doc-title {
@@ -194,6 +201,14 @@ watch(
   flex-wrap: nowrap;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  /* Le balayage des onglets reste horizontal : il n'entraîne plus
+     la page verticalement ni le rebond du navigateur. */
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 .tabs button {
   background: none;
@@ -216,7 +231,9 @@ watch(
 .empty {
   display: grid;
   place-items: center;
-  min-height: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 2rem;
 }
 .empty-card {
