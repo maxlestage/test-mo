@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onBeforeUnmount } from "vue";
 import View from "./components/View.vue";
 import { useTheme } from "./composables/useTheme.js";
 import { useI18n } from "./i18n/index.js";
@@ -8,6 +9,14 @@ import logoUrl from "./assets/logo.svg";
 const { theme, toggle } = useTheme();
 const { t, locale, setLocale, LOCALES } = useI18n();
 const { toggle: toggleNav } = useNav();
+
+// Sur écran étroit, le sélecteur de langue affiche le code (FR, EN…)
+// pour laisser la place au bouton de thème.
+const mq = window.matchMedia("(max-width: 640px)");
+const compact = ref(mq.matches);
+const onMq = (e) => (compact.value = e.matches);
+mq.addEventListener("change", onMq);
+onBeforeUnmount(() => mq.removeEventListener("change", onMq));
 </script>
 
 <template>
@@ -38,7 +47,7 @@ const { toggle: toggleNav } = useNav();
           @change="setLocale($event.target.value)"
         >
           <option v-for="l in LOCALES" :key="l.code" :value="l.code">
-            {{ l.label }}
+            {{ compact ? l.code.toUpperCase() : l.label }}
           </option>
         </select>
         <button
@@ -108,6 +117,20 @@ const { toggle: toggleNav } = useNav();
   display: flex;
   align-items: center;
   gap: 0.85rem;
+  /* Peut se compresser : c'est le titre qui s'ellipse, jamais les
+     boutons de droite qui sortent de l'écran. */
+  min-width: 0;
+}
+.brand > div {
+  min-width: 0;
+}
+.brand h1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-right {
+  flex-shrink: 0;
 }
 .burger {
   display: none;
@@ -167,9 +190,20 @@ const { toggle: toggleNav } = useNav();
     width: 40px;
     height: 40px;
     font-size: 1rem;
+    flex-shrink: 0;
   }
   .lang-sel {
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.45rem;
+  }
+  .header-right {
+    gap: 0.45rem;
+  }
+  .brand {
+    gap: 0.6rem;
+  }
+  .logo {
+    width: 34px;
+    height: 34px;
   }
 }
 </style>
