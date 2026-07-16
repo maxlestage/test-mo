@@ -1,4 +1,4 @@
-# Mo-Grid — Atelier d'analyse linguistique
+# Morpho — Atelier d'analyse linguistique
 
 Outil web d'analyse linguistique de texte, **entièrement local** : aucun texte
 n'est envoyé sur un serveur, tout est calculé dans le navigateur et le corpus
@@ -77,7 +77,7 @@ Heroku détecte le buildpack **Node.js**, exécute `heroku-postbuild`
 ```bash
 # une seule fois
 heroku login
-heroku create mon-app-mo-grid
+heroku create mon-app-morpho
 
 # déployer (depuis la branche à publier)
 git push heroku master        # ou : git push heroku ma-branche:main

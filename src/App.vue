@@ -22,9 +22,9 @@ const { toggle: toggleNav } = useNav();
         >
           <span></span><span></span><span></span>
         </button>
-        <img :src="logoUrl" class="logo" alt="Mo-Grid" />
+        <img :src="logoUrl" class="logo" alt="Morpho" />
         <div>
-          <h1>Mo-Grid</h1>
+          <h1>Morpho</h1>
           <p>{{ t("app.tagline") }}</p>
         </div>
       </div>

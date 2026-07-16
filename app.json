@@ -1,5 +1,5 @@
 {
-  "name": "Mo-Grid",
+  "name": "Morpho",
   "description": "Atelier d'analyse linguistique de texte, 100 % local dans le navigateur (Vue 3 + Vite).",
   "keywords": ["vue", "vite", "linguistique", "textometrie"],
   "buildpacks": [{ "url": "heroku/nodejs" }],
