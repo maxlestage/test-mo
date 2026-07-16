@@ -45,7 +45,7 @@ const messages = {
     "tabs.index": "Index",
 
     "view.export": "⤓ Exporter en PDF",
-    "view.welcome": "Bienvenue dans Mo-Grid",
+    "view.welcome": "Bienvenue dans Morpho",
     "view.welcomeDesc":
       "Écrivez ou collez votre texte ci-dessous pour lancer l'analyse — ou importez un fichier (tous formats texte) depuis le panneau Corpus.",
     "view.placeholder": "Écrivez ou collez votre texte ici…",
@@ -304,7 +304,7 @@ const messages = {
     "ix.results": "formes",
     "ix.empty": "Aucune forme correspondante.",
 
-    "rp.title": "Mo-Grid — Rapport d'analyse linguistique",
+    "rp.title": "Morpho — Rapport d'analyse linguistique",
     "rp.document": "Document",
     "rp.edited": "Édité le",
     "rp.dateLocale": "fr-FR",
@@ -326,7 +326,7 @@ const messages = {
     "rp.mood": "Humeur",
     "rp.positivity": "Positivité",
     "rp.footer":
-      "Généré localement par Mo-Grid — aucune donnée transmise sur le réseau. Méthodes : tokenisation Unicode, indices lexicaux standard, lisibilité (Flesch / Kandel & Moles / LIX), sentiment lexical FR/EN.",
+      "Généré localement par Morpho — aucune donnée transmise sur le réseau. Méthodes : tokenisation Unicode, indices lexicaux standard, lisibilité (Flesch / Kandel & Moles / LIX), sentiment lexical FR/EN.",
   },
 
   en: {
@@ -355,7 +355,7 @@ const messages = {
     "tabs.index": "Index",
 
     "view.export": "⤓ Export to PDF",
-    "view.welcome": "Welcome to Mo-Grid",
+    "view.welcome": "Welcome to Morpho",
     "view.welcomeDesc":
       "Write or paste your text below to start the analysis — or import a file (any text format) from the Corpus panel.",
     "view.placeholder": "Write or paste your text here…",
@@ -611,7 +611,7 @@ const messages = {
     "ix.results": "forms",
     "ix.empty": "No matching form.",
 
-    "rp.title": "Mo-Grid — Linguistic analysis report",
+    "rp.title": "Morpho — Linguistic analysis report",
     "rp.document": "Document",
     "rp.edited": "Generated on",
     "rp.dateLocale": "en-US",
@@ -633,7 +633,7 @@ const messages = {
     "rp.mood": "Mood",
     "rp.positivity": "Positivity",
     "rp.footer":
-      "Generated locally by Mo-Grid — no data sent over the network. Methods: Unicode tokenization, standard lexical indices, readability (Flesch / Kandel & Moles / LIX), FR/EN lexical sentiment.",
+      "Generated locally by Morpho — no data sent over the network. Methods: Unicode tokenization, standard lexical indices, readability (Flesch / Kandel & Moles / LIX), FR/EN lexical sentiment.",
   },
 
   es: {
@@ -662,7 +662,7 @@ const messages = {
     "tabs.index": "Índice",
 
     "view.export": "⤓ Exportar a PDF",
-    "view.welcome": "Bienvenido a Mo-Grid",
+    "view.welcome": "Bienvenido a Morpho",
     "view.welcomeDesc":
       "Escriba o pegue su texto abajo para iniciar el análisis — o importe un archivo (cualquier formato de texto) desde el panel Corpus.",
     "view.placeholder": "Escriba o pegue su texto aquí…",
@@ -919,7 +919,7 @@ const messages = {
     "ix.results": "formas",
     "ix.empty": "Ninguna forma coincidente.",
 
-    "rp.title": "Mo-Grid — Informe de análisis lingüístico",
+    "rp.title": "Morpho — Informe de análisis lingüístico",
     "rp.document": "Documento",
     "rp.edited": "Generado el",
     "rp.dateLocale": "es-ES",
@@ -941,7 +941,7 @@ const messages = {
     "rp.mood": "Ánimo",
     "rp.positivity": "Positividad",
     "rp.footer":
-      "Generado localmente por Mo-Grid — no se envían datos por la red. Métodos: tokenización Unicode, índices léxicos estándar, legibilidad (Flesch / Kandel & Moles / LIX), sentimiento léxico FR/EN.",
+      "Generado localmente por Morpho — no se envían datos por la red. Métodos: tokenización Unicode, índices léxicos estándar, legibilidad (Flesch / Kandel & Moles / LIX), sentimiento léxico FR/EN.",
   },
 
   ru: {
@@ -970,7 +970,7 @@ const messages = {
     "tabs.index": "Индекс",
 
     "view.export": "⤓ Экспорт в PDF",
-    "view.welcome": "Добро пожаловать в Mo-Grid",
+    "view.welcome": "Добро пожаловать в Morpho",
     "view.welcomeDesc":
       "Напишите или вставьте текст ниже, чтобы начать анализ — или импортируйте файл (любой текстовый формат) на панели «Корпус».",
     "view.placeholder": "Напишите или вставьте текст здесь…",
@@ -1226,7 +1226,7 @@ const messages = {
     "ix.results": "форм",
     "ix.empty": "Соответствующих форм нет.",
 
-    "rp.title": "Mo-Grid — Отчёт лингвистического анализа",
+    "rp.title": "Morpho — Отчёт лингвистического анализа",
     "rp.document": "Документ",
     "rp.edited": "Создано",
     "rp.dateLocale": "ru-RU",
@@ -1248,7 +1248,7 @@ const messages = {
     "rp.mood": "Настроение",
     "rp.positivity": "Позитивность",
     "rp.footer":
-      "Создано локально в Mo-Grid — данные не передавались по сети. Методы: токенизация Unicode, стандартные лексические индексы, читабельность (Flesch / Kandel & Moles / LIX), лексическая тональность FR/EN.",
+      "Создано локально в Morpho — данные не передавались по сети. Методы: токенизация Unicode, стандартные лексические индексы, читабельность (Flesch / Kandel & Moles / LIX), лексическая тональность FR/EN.",
   },
 };
 

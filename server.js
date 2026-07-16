@@ -81,5 +81,5 @@ http
     stream.pipe(res);
   })
   .listen(PORT, () => {
-    console.log(`Mo-Grid en écoute sur le port ${PORT} (dist/)`);
+    console.log(`Morpho en écoute sur le port ${PORT} (dist/)`);
   });
