@@ -78,6 +78,26 @@ Installation sur iPhone : ouvrir l'app dans Safari → bouton
 **Partager** → **« Sur l'écran d'accueil »**. L'icône Morpho apparaît
 comme une app native, en plein écran, et fonctionne sans connexion.
 
+## Application iOS native (WebView)
+
+Le dossier `ios/` contient un projet Xcode complet généré par
+**Capacitor** : une app native dont l'interface est une WKWebView
+embarquant le build Morpho (fichiers locaux, fonctionne hors ligne).
+Capacitor 8 utilise Swift Package Manager — aucun CocoaPods requis.
+
+Sur un Mac avec Xcode :
+
+```bash
+npm install
+npm run build
+npx cap sync ios        # copie dist/ dans le projet natif
+npx cap open ios        # ouvre Xcode
+```
+
+Puis dans Xcode : choisir une équipe de signature (Signing &
+Capabilities) et lancer sur simulateur ou appareil. La distribution
+App Store demande un compte Apple Developer.
+
 ## Déploiement sur Heroku
 
 L'application est servie par un petit serveur Node sans dépendance

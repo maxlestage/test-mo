@@ -14,10 +14,15 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0",
     "@vitejs/plugin-vue": "^5",
     "pinia": "^2.1.7",
     "uuid": "^9.0.1",
     "vite": "^5",
     "vue": "^3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^8.5.0"
   }
 }
