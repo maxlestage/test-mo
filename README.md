@@ -67,6 +67,17 @@ bun run build     # build de production
 bun run preview   # prévisualisation du build
 ```
 
+## Application iOS / Android (PWA)
+
+Morpho est une **Progressive Web App** installable : manifest, icônes,
+mode plein écran et service worker de cache (`public/sw.js`) qui rend
+l'application **utilisable hors ligne** — cohérent avec son
+fonctionnement 100 % local.
+
+Installation sur iPhone : ouvrir l'app dans Safari → bouton
+**Partager** → **« Sur l'écran d'accueil »**. L'icône Morpho apparaît
+comme une app native, en plein écran, et fonctionne sans connexion.
+
 ## Déploiement sur Heroku
 
 L'application est servie par un petit serveur Node sans dépendance
