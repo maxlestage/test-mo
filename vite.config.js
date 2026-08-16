@@ -1,8 +1,9 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
-// Déployé sur Heroku à la racine du domaine -> base = "/".
+// Chemins relatifs : le même build est servi à la racine sur Heroku
+// et chargé en file:// dans la WebView iOS (ios/).
 export default defineConfig({
-  base: "/",
+  base: "./",
   plugins: [vue()],
 });
