@@ -11,18 +11,14 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server.js",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "ios:assets": "npm run build && rm -rf ios/Morpho/Resources/www && cp -r dist ios/Morpho/Resources/www"
   },
   "dependencies": {
-    "@capacitor/core": "^8.5.0",
-    "@capacitor/ios": "^8.5.0",
     "@vitejs/plugin-vue": "^5",
     "pinia": "^2.1.7",
     "uuid": "^9.0.1",
     "vite": "^5",
     "vue": "^3"
-  },
-  "devDependencies": {
-    "@capacitor/cli": "^8.5.0"
   }
 }

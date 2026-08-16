@@ -1,0 +1,45 @@
+# Spécification XcodeGen — générer le projet avec :  xcodegen generate
+name: Morpho
+options:
+  bundleIdPrefix: app.morpho
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+
+targets:
+  Morpho:
+    type: application
+    platform: iOS
+    sources:
+      - path: Morpho/Sources
+      - path: Morpho/Resources/Assets.xcassets
+      - path: Morpho/Resources/LaunchScreen.storyboard
+      # Référence de dossier (bleu) : le build web est copié tel quel
+      # dans le bundle. Généré par `npm run ios:assets` — s'il est
+      # absent, l'app bascule sur l'URL distante.
+      - path: Morpho/Resources/www
+        type: folder
+        optional: true
+        buildPhase: resources
+    info:
+      path: Morpho/Info.plist
+      properties:
+        CFBundleDisplayName: Morpho
+        UILaunchStoryboardName: LaunchScreen
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIViewControllerBasedStatusBarAppearance: true
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.morpho.mobile
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_KEY_UIUserInterfaceStyle: Automatic
