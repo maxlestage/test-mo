@@ -1,9 +1,0 @@
-{
-  "appId": "app.morpho.mobile",
-  "appName": "Morpho",
-  "webDir": "dist",
-  "ios": {
-    "contentInset": "automatic",
-    "backgroundColor": "#0f1117"
-  }
-}
