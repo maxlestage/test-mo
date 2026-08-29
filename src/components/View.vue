@@ -143,6 +143,8 @@ watch(
             <li>{{ t("view.feat4") }}</li>
             <li>{{ t("view.feat5") }}</li>
           </ul>
+
+          <p class="credit">{{ t("app.credit") }}</p>
         </div>
       </div>
     </main>
@@ -297,6 +299,13 @@ watch(
   line-height: 1.8;
   margin: 1rem 0 0;
   padding-left: 1.1rem;
+}
+.empty-card .credit {
+  margin: 1.25rem 0 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.74rem;
+  color: var(--text-dim);
 }
 
 @media (max-width: 860px) {
