@@ -9,6 +9,8 @@ coulissant) comme sur desktop.
 
 Construit avec **Vue 3** (`<script setup>`) + **Vite** + **Pinia**.
 
+Conçu et développé par **Maxime Nathan Lestage**.
+
 ## Déployer en un clic
 
 Depuis un téléphone ou un ordinateur, sans rien installer — connecte-toi à

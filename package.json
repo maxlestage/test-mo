@@ -1,6 +1,7 @@
 {
   "name": "morpho",
   "private": true,
+  "author": "Maxime Nathan Lestage",
   "version": "0.0.0",
   "type": "module",
   "engines": {

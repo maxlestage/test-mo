@@ -25,6 +25,7 @@ const messages = {
     "app.toLight": "Thème clair",
     "app.toDark": "Thème sombre",
     "app.uiLang": "Langue de l'interface",
+    "app.credit": "Conçu et développé par Maxime Nathan Lestage",
     "nav.menu": "Menu",
 
     "tabs.overview": "Vue d'ensemble",
@@ -335,6 +336,7 @@ const messages = {
     "app.toLight": "Light theme",
     "app.toDark": "Dark theme",
     "app.uiLang": "Interface language",
+    "app.credit": "Designed and developed by Maxime Nathan Lestage",
     "nav.menu": "Menu",
 
     "tabs.overview": "Overview",
@@ -642,6 +644,7 @@ const messages = {
     "app.toLight": "Tema claro",
     "app.toDark": "Tema oscuro",
     "app.uiLang": "Idioma de la interfaz",
+    "app.credit": "Diseñado y desarrollado por Maxime Nathan Lestage",
     "nav.menu": "Menú",
 
     "tabs.overview": "Resumen",
@@ -950,6 +953,7 @@ const messages = {
     "app.toLight": "Светлая тема",
     "app.toDark": "Тёмная тема",
     "app.uiLang": "Язык интерфейса",
+    "app.credit": "Дизайн и разработка: Maxime Nathan Lestage",
     "nav.menu": "Меню",
 
     "tabs.overview": "Обзор",
