@@ -295,7 +295,11 @@ const spk = computed(() => speakers.value);
       </table>
     </section>
 
-    <footer>{{ t("rp.footer") }}</footer>
+    <footer>
+      {{ t("rp.footer") }}
+      <br />
+      {{ t("app.credit") }}
+    </footer>
   </div>
 </template>
 
