@@ -98,6 +98,8 @@ function addPasted() {
         <span>{{ t("mgr.removeStop") }}</span>
       </label>
     </section>
+
+    <p class="credit">{{ t("app.credit") }}</p>
   </aside>
 </template>
 
@@ -140,6 +142,13 @@ h2 {
 }
 .doc-list li:hover {
   border-color: var(--accent);
+}
+.credit {
+  margin: auto 0 0;
+  padding-top: 1rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  color: var(--text-dim);
 }
 .doc-list li.selected {
   background: var(--accent-soft);
